@@ -1,0 +1,160 @@
+<?php
+	if(isset($_POST['simpan'])){
+		if(addcalsis($_POST)>0){
+			$id=base64_encode($_POST['nisn']);
+			if(isinopend($_POST)>0){
+				header("Location:index.php?p=regisbukti&id=$id");
+				exit;
+			}
+		}
+	}
+?>
+<div class="card card-primary card-outline">
+	<div class="card-header">
+		<h5 class="m-0">Registrasi Calon Peserta Didik</h5>
+	</div>
+	<form method="post" enctype="multipart/form-data" action="">
+		<div class="card-body">
+			<div class="row">
+				<div class="col-sm-2">
+					<div id="fotosiswa" style="text-align:center;margin-bottom:10px">
+						<img class="img img-responsive img-rounded" id="image-preview" src="assets/img/nouser.png" height="180px"/>
+						<span id="fotosiswa_status"></span>
+					</div>
+				</div>
+				<div class="col-sm-5">
+					<div class="row mb-2">
+						<label class="offset-sm-1 col-sm-5">Nama Calon Peserta Didik</label>
+						<div class="col-sm-6">
+							<input class="form-control" name="nama" id="nama" placeholder="Nama Calon Peserta Didik">
+						</div>
+					</div>
+					<div class="row mb-2">
+						<label class="offset-sm-1 col-sm-5">N I K</label>
+						<div class="col-sm-6">
+							<input class="form-control" name="nik" id="nik" onkeyup="validAngka(this)" placeholder="Nomor Induk Kependudukan (16 Digit)">
+						</div>
+					</div>
+					<div class="row mb-2">
+						<label class="offset-sm-1 col-sm-5">N I S N</label>
+						<div class="col-sm-6">
+							<input class="form-control" name="nisn" id="nisn" onkeyup="validAngka(this)" placeholder="NISN yang terdaftar di dapodik (10 Digit)">
+						</div>
+					</div>
+					<div class="row mb-2">
+						<label class="offset-sm-1 col-sm-5">Tempat Lahir</label>			
+						<div class="col-sm-6">
+							<input class="form-control" name="tmplahir" id="tmplahir" placeholder="Tempat Lahir Sesuai dengan Akte">
+						</div>
+					</div>
+					<div class="row mb-2">
+						<label class="offset-sm-1 col-sm-5">Tanggal Lahir</label>
+						<div class="col-sm-6">
+							<input class="form-control" name="tgllahir" id="tgllahir" placeholder="Tanggal Lahir (yyyy-mm-dd)">
+						</div>
+					</div>
+					<div class="row mb-2">
+						<label class="offset-sm-1 col-sm-5">Jenis Kelamin</label>
+						<div class="col-sm-6">
+							<select class="form-control" name="gender" id="gender">
+								<option value="">..Pilih..</option>
+								<option value="L">Laki-laki</option>
+								<option value="P">Perempuan</option>
+							</select>
+						</div>
+					</div>
+					<div class="row mb-2">
+						<label class="offset-sm-1 col-sm-5">Agama</label>
+						<div class="col-sm-6">
+							<select class="form-control" name="agama" id="agama">
+								<option value="">..Pilih..</option>
+								<option value="A">Islam</option>
+								<option value="B">Kristen</option>
+								<option value="C">Katholik</option>
+								<option value="D">Hindu</option>
+								<option value="E">Buddha</option>
+								<option value="F">Konghucu</option>
+							</select>
+						</div>
+					</div>
+					<div class="row mb-2">
+						<label class="offset-sm-1 col-sm-5">Alamat</label>
+						<div class="col-sm-6">
+							<input class="form-control" name="almt" id="almt" placeholder="Alamat (Contoh: Jalan Pangeran Diponegoro)">
+						</div>
+					</div>
+				</div>
+				<div class="col-sm-5">
+					<div class="row mb-2">
+						<label class="offset-sm-1 col-sm-5">Desa / Kelurahan</label>
+						<div class="col-sm-6">		
+							<input class="form-control" name="desa" id="desa" placeholder="Desa / Kelurahan">		
+						</div>
+					</div>
+					<div class="row mb-2">
+						<label class="offset-sm-1 col-sm-5">Kecamatan</label>
+						<div class="col-sm-6">		
+							<input class="form-control" name="kec" id="kec" placeholder="Kecamatan">	
+						</div>
+					</div>
+					<div class="row mb-2">
+						<label class="offset-sm-1 col-sm-5">Kabupaten/Kota</label>
+						<div class="col-sm-6">
+							<input class="form-control" name="kab" id="kab" placeholder="Kabupaten/Kota">
+						</div>
+					</div>
+					<div class="row mb-2">
+						<label class="offset-sm-1 col-sm-5">Provinsi</label>
+						<div class="col-sm-6">
+							<input class="form-control" name="prov" id="prov" placeholder="Provinsi">
+						</div>
+					</div>					
+					<div class="row mb-2">
+						<label class="offset-sm-1 col-sm-5">Kode Pos</label>
+						<div class="col-sm-6">
+							<input class="form-control" name="kdpos" id="kdpos" placeholder="Kode Pos">
+						</div>
+					</div>
+					<div class="row mb-2">
+						<label class="offset-sm-1 col-sm-5">Nomor HP</label>
+						<div class="col-sm-6">
+							<input class="form-control" name="nohp" id="nohp" placeholder="Nomor HP yang masih aktif">
+						</div>
+					</div>
+					<div class="row mb-2">
+						<label class="offset-sm-1 col-sm-5">Foto</label>
+						<div class="col-sm-6">
+							<div class="custom-file">
+								<input type="file" class="custom-file-input" id="foto" name="foto">
+								<label class="custom-file-label" for="foto">Browse</label>
+							</div>
+						</div>
+					</div>
+				</div> 
+			</div>		
+		</div>	
+		<div class="card-footer justify-content-between">
+			<button class="btn btn-md btn-primary col-md-2 mb-3" id="simpan" name="simpan">
+				<i class="fas fa-fw fa-save"></i> Simpan
+			</button>
+			<a href="?p=home" class="btn btn-md btn-danger col-md-2 mb-3">
+				<i class="fas fa-fw fa-power-off"></i> Tutup
+			</a>
+		</div>
+	</form>
+</div>
+<script type="text/javascript">
+	function validAngka(a)
+	{
+		if(!/^[0-9.]+$/.test(a.value))
+		{
+			toastr.error('Khusus Angka 1-9 Saja Bro!!');
+		}
+	}
+	$(document).ready(function(){
+		$('#tgllahir').datetimepicker({
+			timepicker:false,
+			format: 'Y-m-d'
+		});
+	})
+</script>
