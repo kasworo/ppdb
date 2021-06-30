@@ -1,5 +1,5 @@
 <?php
-	$sk=viewdata("tb_skul",NULL,NULL,NULL)[0];
+	$sk=viewdata("tb_skul")[0];
     if($sk['logo']=='' || $sk['logo']==null){
 		$logoskul='assets/img/avatar.gif';
 	}

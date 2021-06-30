@@ -1,5 +1,4 @@
 <?php
-include "../config/konfigurasi.php";
 $id=base64_decode($_REQUEST['id']);
 ?>
 <div class="alert alert-warning">

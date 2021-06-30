@@ -37,7 +37,7 @@
                 </thead>
                 <tbody>
                 <?php
-                    $qs=mysqli_query($sqlconn,"SELECT nopend, nisn, nama, foto FROM tb_calsis s  WHERE deleted='0' AND kdthpel='$_COOKIE[c_tahun]' ORDER BY nopend ASC");
+                    $qs=mysqli_query($sqlconn,"SELECT nopend, nisn, nama, foto FROM tb_calsis s  WHERE deleted='0' AND kdthpel='$_COOKIE[c_tahun]' ORDER BY nopend");
                     $no=0;
                     while($s=mysqli_fetch_array($qs))
                     {
