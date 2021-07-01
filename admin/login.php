@@ -1,7 +1,7 @@
 <?php
   session_start();
   include "dbfunction.php";
-  $skul=query("SELECT*FROM tb_skul")[0];
+  $skul=viewdata("tb_skul")[0];
   
   if(isset($_COOKIE['id'],$_COOKIE['key'])){
 		$id=$_COOKIE['id'];

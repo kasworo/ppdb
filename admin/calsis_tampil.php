@@ -1,13 +1,12 @@
 <?php
-if(!isset($_COOKIE['c_user'])){header("Location: login.php");}
-if($_COOKIE['c_login']=='1') {
+if($level=='1') {
 ?>
 <script type="text/javascript">
 $(document).ready(function () {
 	bsCustomFileInput.init();
 });
 </script>
-<?php if(!empty($_REQUEST['d']) && $_REQUEST['d']=='1'){include "siswa_upload.php";}?>
+<?php if(!empty($_GET['d']) && $_GET['d']=='1'){include "siswa_upload.php";}?>
 <div class="modal fade" id="myImportSiswa" aria-modal="true">
 	<div class="modal-dialog">
 		<div class="modal-content">
@@ -37,9 +36,7 @@ $(document).ready(function () {
 				</div>
 			</form>
 		</div>
-			<!-- /.modal-content -->
 	</div>
-		<!-- /.modal-dialog -->
 </div>
 <div class="col-sm-12">
     <div class="card card-secondary card-outline">
@@ -80,9 +77,9 @@ $(document).ready(function () {
                 </thead>
                 <tbody>
                 <?php
-                    $qs=mysqli_query($sqlconn,"SELECT s.nopend, s.nisn, s.nama,s.tmplhr, s.tgllhr, s.gender, nmwali FROM tb_calsis s LEFT JOIN tb_ortu w ON w.idcalsis=s.idcalsis WHERE deleted='0' AND kdthpel='$_COOKIE[c_tahun]'");
+                    $qs=viewdata("v_calsis");
                     $no=0;
-                    while($s=mysqli_fetch_array($qs))
+                   foreach($qs as $s)
                     {
                         $no++;
                 ?>
@@ -95,10 +92,10 @@ $(document).ready(function () {
                   <td style="text-align:center"><?php echo $s['gender'];?></td>
                   <td><?php echo ucwords(strtolower($s['nmwali']));?></td>
                   <td style="text-align: center">
-                    <a href="index.php?p=addsiswa&m=3&id=<?php echo base64_encode($s['nopend']);?>" class="btn btn-xs btn-success btn-flat">
+                    <a href="index.php?p=addsiswa&m=2&id=<?php echo base64_encode($s['idcalsis']);?>" class="btn btn-xs btn-success btn-flat">
                         <i class="fas fa-edit"></i>&nbsp;Edit
                     </a>
-                    <button data-id="<?php echo base64_encode($s['nopend']);?>" class="btn btn-xs btn-danger btn-flat btnHapus">
+                    <button data-id="<?php echo base64_encode($s['idcalsis']);?>" class="btn btn-xs btn-danger btn-flat btnHapus">
                         <i class="fas fa-trash-alt"></i>&nbsp;Hapus
                     </button>
                   </td>

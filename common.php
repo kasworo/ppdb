@@ -102,7 +102,7 @@
         $nisn=$data['nisn'];
         $nik=$data['nik'];
         $nopend=getnomor();
-        $sql="UPDATE tb_calsis SET nopend='$nopend' WHERE nisn='$nisn' OR nik='$nik'";
+        $sql="UPDATE tb_calsis SET nopend='$nopend' WHERE nisn='$nisn'";
         mysqli_query($conn,$sql);
         return mysqli_affected_rows($conn);
        

@@ -29,21 +29,21 @@
 	<meta http-equiv="x-ua-compatible" content="ie=edge">
 	<title>Sistem Informasi PPDB</title>
 	<link href='../assets/img/tutwuri.png' rel='icon' type='image/png'/>
-	<!-- Font Awesome Icons -->
 	<link rel="stylesheet" href="../assets/css/all.min.css">
-	<!-- Theme style -->
+	<link rel="stylesheet" href="../assets/plugins/overlayScrollbars/css/OverlayScrollbars.min.css">
 	<link rel="stylesheet" href="../assets/css/adminlte.min.css">
 	<link rel="stylesheet" href="../assets/plugins/sweetalert2-theme-bootstrap-4/bootstrap-4.min.css">
 	<link rel="stylesheet" href="../assets/plugins/toastr/toastr.min.css">
+	<link rel="stylesheet" href="../assets/plugins/select2/css/select2.min.css">
+	<link rel="stylesheet" href="../assets/plugins/select2-bootstrap4-theme/select2-bootstrap4.min.css">
 	<link rel="stylesheet" href="../assets/plugins/datatables-bs4/css/dataTables.bootstrap4.min.css">
 	<link rel="stylesheet" href="../assets/plugins/datatables-responsive/css/responsive.bootstrap4.min.css">
-	<!-- Google Font: Source Sans Pro -->
-	<!--<link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700" rel="stylesheet">-->
 	<link rel="stylesheet" type="text/css" href="../assets/css/jquery.datetimepicker.css"> 
 	<link rel="stylesheet" type="text/css" href="../assets/css/dropzone.css"/>
 	<script type="text/javascript" src="../assets/js/dropzone.js"></script>
 	<script type="text/javascript" src="../assets/js/jquery-1.4.js"></script>
-	<script type="text/javascript" src="../assets/js/ajaxupload.3.5.js"></script>
+	<script type="text/javascript" src="../assets/js/ajaxupload.3.5.js" ></script>	
+</head>
 </head>
 <body class="skihold-transition sidebar-mini layout-fixed layout-navbar-fixed layout-footer-fixed">
 <div class="wrapper">
@@ -130,24 +130,16 @@
 	  </li>
 	</ul>
   </nav>
-  <!-- /.navbar -->
-
-  <!-- Main Sidebar Container -->
   <aside class="main-sidebar sidebar-dark-primary elevation-4">
-	<!-- Brand Logo -->
 	<a href="index.php?p=dashboard" class="brand-link">
 	  <img src="../assets/img/logo.png" width="100" class="brand-image elevation-3"
 		   style="opacity: 1.0">
 	 <span class="brand-text font-weight-light">Aplikasi PPDB 1.1</span>
 	</a>
-
-	<!-- Sidebar -->
 	<div class="sidebar">
 	  <nav class="mt-3 pb-3 mb-3">
 		<ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
-		  <!-- Add icons to the links using the .nav-icon class
-			   with font-awesome or any other icon font library -->
-		  <?php	if($level=='1'){ ?>
+			<?php	if($level=='1'){ ?>
 		  <li class="nav-item has-treeview">
 		  	<a href="#" class="nav-link">
 				<i class="nav-icon fas fa-cogs"></i>
@@ -314,35 +306,26 @@
 			  </li>
 		</ul>
 	  </nav>
-	  <!-- /.sidebar-menu -->
 	</div>
-	<!-- /.sidebar -->
   </aside>
-
-  <!-- Content Wrapper. Contains page content -->
   <div class="content-wrapper">
-	<!-- Content Header (Page header) -->
 	<div class="content-header">
 	  <div class="container-fluid">
 		<div class="row mb-2">
 		  <div class="col-sm-6">
 			<h1 class="m-0 text-dark">Dashboard</h1>
-		  </div><!-- /.col -->
+		  </div>
 		  <div class="col-sm-6">
 			<ol class="breadcrumb float-sm-right">
 			  <li class="breadcrumb-item"><a href="#">Home</a></li>
 			  <li class="breadcrumb-item active">Dashboard v1</li>
 			</ol>
-		  </div><!-- /.col -->
-		</div><!-- /.row -->
-	  </div><!-- /.container-fluid -->
+		  </div>
+		</div>
+	  </div>
 	</div>
-	<!-- /.content-header -->
-
-	<!-- Main content -->
 	<section class="content">
 	  <div class="container-fluid">
-		<!-- Small boxes (Stat box) -->
 		<div class="form-group">
 		<?php
 			if(!isset($_GET['p']) || $_GET['p']=='' || $_GET['p']=='dashboard') {include "dashboard.php";}
@@ -367,13 +350,10 @@
 			else if($_GET['p']=='hasilseleksi'){include "seleksi_tampil.php";}
 			
 		?>		  
-		</div>
-		<!-- /.row (main row) -->
-	  </div><!-- /.container-fluid -->
+		</div>		
+	  </div>
 	</section>
-	<!-- /.content -->
   </div>
-  <!-- /.content-wrapper -->
   <footer class="main-footer text-sm">
 	<strong>Copyright &copy;</strong> Kasworo Wardani, Template By <a href="http://adminlte.io">AdminLTE.io</a>.
 	All rights reserved.
@@ -381,16 +361,9 @@
 	  <b>Versi</b> 1.0.0
 	</div>
   </footer>
-
-  <!-- Control Sidebar -->
-  <aside class="control-sidebar control-sidebar-dark">
-	<!-- Control sidebar content goes here -->
-  </aside>
-  <!-- /.control-sidebar -->
 </div>
-<!-- ./wrapper -->
-<!-- jQuery -->
-<script type="text/javascript" src="../assets/js/jquery.js"></script>
+<script type="text/javascript" src="../assets/plugins/jquery/jquery.min.js"></script>
+	
 <script type="text/javascript">
 	$(document).ready(function(){
 		$("#goleki").click(function(){
@@ -441,18 +414,19 @@
 		})		
 	})
 </script>
-<script src="../assets/plugins/jquery/jquery.min.js"></script>
-<!-- Bootstrap 4 -->
 <script src="../assets/js/bootstrap.bundle.min.js"></script>
-<!-- AdminLTE App -->
 <script src="../assets/js/adminlte.min.js"></script>
-<script src="../assets/plugins/toastr/toastr.min.js"></script>
 <script src="../assets/plugins/sweetalert2/sweetalert2.min.js"></script>
+<script src="../assets/plugins/toastr/toastr.min.js"></script>
+<script src="../assets/plugins/select2/js/select2.full.min.js"></script>
+<script src="../assets/plugins/overlayScrollbars/js/jquery.overlayScrollbars.min.js"></script>
 <script src="../assets/js/jquery.datetimepicker.full.js"></script>
+<script src="../assets/plugins/bootstrap-switch/js/bootstrap-switch.min.js"></script>
 <script src="../assets/plugins/bs-custom-file-input/bs-custom-file-input.min.js"></script>
 <script src="../assets/plugins/datatables/jquery.dataTables.min.js"></script>
 <script src="../assets/plugins/datatables-bs4/js/dataTables.bootstrap4.min.js"></script>
 <script src="../assets/plugins/datatables-responsive/js/dataTables.responsive.min.js"></script>
 <script src="../assets/plugins/datatables-responsive/js/responsive.bootstrap4.min.js"></script>
+<script src="../assets/plugins/jquery-validation/jquery.validate.min.js"></script>
 </body>
 </html>

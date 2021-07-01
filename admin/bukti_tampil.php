@@ -1,6 +1,3 @@
-<?php
-if(!isset($_COOKIE['c_user'])){header("Location: login.php");}
-?>
 <div class="col-sm-12">
     <div class="card card-secondary card-outline">
         <div class="card-header">
@@ -31,10 +28,10 @@ if(!isset($_COOKIE['c_user'])){header("Location: login.php");}
                 </thead>
                 <tbody>
                 <?php
-                    $qs=mysqli_query($sqlconn,"SELECT s.nopend, s.nisn, s.nama,s.tmplhr, s.tgllhr, s.gender, nmskulasal FROM tb_calsis s LEFT JOIN tb_skul_asal sa ON sa.idskulasal=s.idskulasal WHERE deleted='0' AND kdthpel='$_COOKIE[c_tahun]'");
+                    $qs=viewdata("v_calsis");
                     $no=0;
                     
-                    while($s=mysqli_fetch_array($qs))
+                   foreach($qs as $s)
                     {
                         $no++;
                 ?>

@@ -1,5 +1,5 @@
 <?php
-$id=base64_decode($_REQUEST['id']);
+$id=base64_decode($_GET['id']);
 ?>
 <div class="alert alert-warning">
 	<p><strong>Petunjuk:</strong></p>
@@ -15,7 +15,7 @@ $id=base64_decode($_REQUEST['id']);
 				<?php
 						$no=0;
 						$rerata=0;
-						$qnil=mysqli_query($sqlconn, "SELECT*FROM tb_mapel");
+						$qnil=mysqli_query($conn, "SELECT*FROM tb_mapel");
 						while($n=mysqli_fetch_array($qnil))
 						{
 							$no++;
@@ -24,49 +24,49 @@ $id=base64_decode($_REQUEST['id']);
 								<label class="col-sm-4"><?php echo $n['nmmapel'];?></label>
 								<div class="col-sm-1" style="padding-bottom:5px">
 									<?php
-										$q1=mysqli_query($sqlconn,"SELECT nilai FROM tb_nilai WHERE semester='1' AND jns='1' AND kdmapel='$n[kdmapel]' AND nopend='$id'");
+										$q1=mysqli_query($conn,"SELECT nilai FROM tb_nilai WHERE semester='1' AND jns='1' AND kdmapel='$n[kdmapel]' AND nopend='$id'");
 										$row=mysqli_fetch_array($q1);
 									?>
 									<input class="form-control form-control-sm" id="nilai1<?php echo $n['kdmapel'];?>" style="text-align:center" placeholder="Sms 1" value="<?php echo $row['nilai'];?>"/>
 								</div>
 								<div class="col-sm-1" style="padding-bottom:5px">
 									<?php
-										$q1=mysqli_query($sqlconn,"SELECT nilai FROM tb_nilai WHERE semester='2' AND jns='1' AND  kdmapel='$n[kdmapel]' AND nopend='$id'");
+										$q1=mysqli_query($conn,"SELECT nilai FROM tb_nilai WHERE semester='2' AND jns='1' AND  kdmapel='$n[kdmapel]' AND nopend='$id'");
 										$row1=mysqli_fetch_array($q1);
 									?>
 									<input class="form-control form-control-sm col-xs-8" id="nilai2<?php echo $n['kdmapel'];?>" style="text-align:center" placeholder="Sms 2" value="<?php echo $row1['nilai'];?>"/>
 								</div>
 								<div class="col-sm-1" style="padding-bottom:5px">
 									<?php
-										$q2=mysqli_query($sqlconn,"SELECT nilai FROM tb_nilai WHERE semester='3' AND jns='1' AND  kdmapel='$n[kdmapel]' AND nopend='$id'");
+										$q2=mysqli_query($conn,"SELECT nilai FROM tb_nilai WHERE semester='3' AND jns='1' AND  kdmapel='$n[kdmapel]' AND nopend='$id'");
 										$row2=mysqli_fetch_array($q2);
 									?>
 									<input class="form-control form-control-sm" id="nilai3<?php echo $n['kdmapel'];?>" style="text-align:center" placeholder="Sms 3" value="<?php echo $row2['nilai'];?>"/>
 								</div>
 								<div class="col-sm-1" style="padding-bottom:5px">
 									<?php
-										$q3=mysqli_query($sqlconn,"SELECT nilai FROM tb_nilai WHERE semester='4' AND jns='1' AND  kdmapel='$n[kdmapel]' AND nopend='$id'");
+										$q3=mysqli_query($conn,"SELECT nilai FROM tb_nilai WHERE semester='4' AND jns='1' AND  kdmapel='$n[kdmapel]' AND nopend='$id'");
 										$row3=mysqli_fetch_array($q3);
 									?>
 									<input class="form-control form-control-sm" id="nilai4<?php echo $n['kdmapel'];?>" style="text-align:center" placeholder="Sms 4" value="<?php echo $row3['nilai'];?>"/>
 								</div>
 								<div class="col-sm-1" style="padding-bottom:5px">
 									<?php
-										$q4=mysqli_query($sqlconn,"SELECT nilai FROM tb_nilai WHERE semester='5' AND jns='1' AND  kdmapel='$n[kdmapel]' AND nopend='$id'");
+										$q4=mysqli_query($conn,"SELECT nilai FROM tb_nilai WHERE semester='5' AND jns='1' AND  kdmapel='$n[kdmapel]' AND nopend='$id'");
 										$row4=mysqli_fetch_array($q4);
 									?>
 									<input class="form-control form-control-sm" id="nilai5<?php echo $n['kdmapel'];?>" style="text-align:center" placeholder="Sms 5" value="<?php echo $row4['nilai'];?>"/>
 								</div>
 								<div class="col-sm-1" style="padding-bottom:5px">
 									<?php
-										$q5=mysqli_query($sqlconn,"SELECT nilai FROM tb_nilai WHERE semester='6' AND jns='1' AND  kdmapel='$n[kdmapel]' AND nopend='$id'");
+										$q5=mysqli_query($conn,"SELECT nilai FROM tb_nilai WHERE semester='6' AND jns='1' AND  kdmapel='$n[kdmapel]' AND nopend='$id'");
 										$row5=mysqli_fetch_array($q5);
 									?>
 									<input class="form-control form-control-sm" id="nilai6<?php echo $n['kdmapel'];?>" style="text-align:center" placeholder="Sms 6" value="<?php echo $row5['nilai'];?>"/>
 								</div>
 								<div class="col-sm-1" style="padding-bottom:5px">
 									<?php
-										$qus=mysqli_query($sqlconn,"SELECT nilai FROM tb_nilai WHERE semester='6' AND jns='2' AND  kdmapel='$n[kdmapel]' AND nopend='$id'");
+										$qus=mysqli_query($conn,"SELECT nilai FROM tb_nilai WHERE semester='6' AND jns='2' AND  kdmapel='$n[kdmapel]' AND nopend='$id'");
 										$rus=mysqli_fetch_array($qus);
 									?>
 									<input class="form-control form-control-sm" id="nilaius<?php echo $n['kdmapel'];?>" style="text-align:center" placeholder="Nilai US" value="<?php echo $rus['nilai'];?>"/>
