@@ -66,12 +66,12 @@ $(document).ready(function () {
                 <thead>
                 <tr>
                   <th style="text-align: center;width:5%">No.</th>
-                  <th style="text-align: center;width:22.5%">Nama Siswa</th>
+                  <th style="text-align: center;width:20%">Nama Siswa</th>
                   <th style="text-align: center;width:7.5%">NISN</th>
-                  <th style="text-align: center;width:15%">Tempat Lahir</th>
-                  <th style="text-align: center;width:15%">Tanggal Lahir</th>
+                  <th style="text-align: center;width:12.5%">Tempat Lahir</th>
+                  <th style="text-align: center;width:17.5%">Tanggal Lahir</th>
                   <th style="text-align: center;width:2.5%">L/P</th>
-                  <th style="text-align: center;width:17.5%">Nama Orang Tua</th>
+                  <th style="text-align: center;width:15%">Nama Orang Tua</th>
                   <th style="text-align: center">Aksi</th>
                 </tr>
                 </thead>

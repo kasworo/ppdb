@@ -1,13 +1,6 @@
 <?php
-	if(!isset($_COOKIE['c_user'])){header("Location: login.php");}
- 
 require_once ('../assets/library/fpdf/fpdf.php');
-
-include "../config/fungsi_tgl.php";
-
-// pendefinisian folder font pada FPDF
-// seperti sebelunya, kita membuat class anakan dari class FPDF
-
+include "dbfunction.php";
 class PDF extends FPDF{
 	function Header()
 	{

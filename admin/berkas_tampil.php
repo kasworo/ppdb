@@ -26,20 +26,20 @@
                 <thead>
                 <tr>
                   <th style="text-align: center;width:2.5%">No.</th>
-                  <th style="text-align: center;">Nama Siswa</th>
-                  <th style="text-align: center;width:10%">NISN</th>
+                  <th style="text-align: center;width:10%">Nama Siswa</th>
+                  <th style="text-align: center;width:7.5%">NISN</th>
                   <th style="text-align: center;width:10%">Foto</th>
                   <th style="text-align: center;width:12.5%">Akte</th>
                   <th style="text-align: center;width:12.5%">KK</th>
                   <th style="text-align: center;width:10%">SKHU</th>
-                  <th style="text-align: center;width:17.5%">Aksi</th>
+                  <th style="text-align: center">Aksi</th>
                 </tr>
                 </thead>
                 <tbody>
                 <?php
-                    $qs=mysqli_query($sqlconn,"SELECT nopend, nisn, nama, foto FROM tb_calsis s  WHERE deleted='0' AND kdthpel='$_COOKIE[c_tahun]' ORDER BY nopend");
+                    $qs=viewdata("v_calsis");
                     $no=0;
-                    while($s=mysqli_fetch_array($qs))
+                    foreach($qs as $s)
                     {
                         $no++;
                         if($s['foto']==''){$foto='Belum Upload';$btn='badge-danger';}

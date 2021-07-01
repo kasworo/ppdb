@@ -1,7 +1,6 @@
 <?php
 	function umur($tgl_lahir, $tgl_batas)
 	{
-		// ubah ke format Ke Date Time
 		$lahir = new DateTime($tgl_lahir);
 		$batas = new DateTime($tgl_batas);
 		$diff = $batas->diff($lahir);

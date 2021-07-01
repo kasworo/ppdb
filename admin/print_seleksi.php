@@ -1,22 +1,15 @@
 <?php
-	if(!isset($_COOKIE['c_user'])){header("Location: login.php");}
- 
 require_once ('../assets/library/fpdf/fpdf.php');
-
-include "../config/fungsi_tgl.php";
-
-// pendefinisian folder font pada FPDF
-// seperti sebelunya, kita membuat class anakan dari class FPDF
-
+include "dbfunction.php";
 class PDF extends FPDF{
 	function Header()
 	{
 	include "../config/konfigurasi.php";
-	$sqlsetid=mysqli_query($sqlconn, "SELECT*FROM tb_thpel WHERE aktif='Y'");
+	$sqlsetid=mysqli_query($conn, "SELECT*FROM tb_thpel WHERE aktif='Y'");
 	$setid=mysqli_fetch_array($sqlsetid);
 	$thpel=substr($setid['nmthpel'],0,9);
 
-	$sqlad = mysqli_query($sqlconn, "SELECT *FROM tb_skul");
+	$sqlad = mysqli_query($conn, "SELECT *FROM tb_skul");
 	$ad = mysqli_fetch_array($sqlad);
 	$nmskul = $ad['nmskul'];
 	$skpd =$ad['skpd'];
@@ -79,7 +72,7 @@ class PDF extends FPDF{
 	function Footer()
 	{
 	include "../config/konfigurasi.php";
-	$sqlf = mysqli_query($sqlconn, "SELECT*FROM tb_skul");
+	$sqlf = mysqli_query($conn, "SELECT*FROM tb_skul");
 	$row = mysqli_fetch_array($sqlf);	 
 	$this->SetFont('Times','B','10');
 	$this->SetY(-1.5,5);
@@ -100,11 +93,11 @@ class PDF extends FPDF{
 	$pdf->SetLineWidth(0.005);
 	$pdf->SetFont('Times','','9');
 	include "../config/konfigurasi.php";
-	$aw=mysqli_query($sqlconn,"SELECT awal FROM tb_thpel WHERE kdthpel='$_COOKIE[c_tahun]'");
+	$aw=mysqli_query($conn,"SELECT awal FROM tb_thpel WHERE kdthpel='$_COOKIE[c_tahun]'");
 	$row=mysqli_fetch_array($aw);
 	$awal=$row['awal'];
 
-	$tam = mysqli_query($sqlconn, "SELECT jsiswa, jrombel, jsiswa*jrombel as dt FROM tb_dayatampung WHERE kdthpel='$_COOKIE[c_tahun]'");
+	$tam = mysqli_query($conn, "SELECT jsiswa, jrombel, jsiswa*jrombel as dt FROM tb_dayatampung WHERE kdthpel='$_COOKIE[c_tahun]'");
 	$row=mysqli_fetch_array($tam);
 	$js=$row['jsiswa'];
 	$jr = $row['jrombel']; 
@@ -113,7 +106,7 @@ class PDF extends FPDF{
 	$no=0;
 	$terima=0;
 	$tolak=0; 
-	$sqlc = mysqli_query($sqlconn, "SELECT cs.* , ws.nmwali, SUM(ns.nilai) as jml, sa.nmskulasal as asl FROM tb_calsis cs INNER JOIN tb_ortu ws ON ws.nopend=cs.nopend INNER JOIN tb_nilai ns ON cs.nopend=ns.nopend	INNER JOIN tb_skul_asal sa ON cs.idskulasal=sa.idskulasal WHERE cs.kdthpel='$_COOKIE[c_tahun]' GROUP BY ns.nopend ORDER BY jml DESC");
+	$sqlc = mysqli_query($conn, "SELECT cs.* , ws.nmwali, SUM(ns.nilai) as jml, sa.nmskulasal as asl FROM tb_calsis cs INNER JOIN tb_ortu ws ON ws.nopend=cs.nopend INNER JOIN tb_nilai ns ON cs.nopend=ns.nopend	INNER JOIN tb_skul_asal sa ON cs.idskulasal=sa.idskulasal WHERE cs.kdthpel='$_COOKIE[c_tahun]' GROUP BY ns.nopend ORDER BY jml DESC");
 	while ($row=mysqli_fetch_array($sqlc))
 	{
 	$no++;
@@ -151,10 +144,10 @@ class PDF extends FPDF{
 	$pdf->Ln();
 	}
 	
-	$rekl = mysqli_query($sqlconn,"SELECT count(*) as lk FROM tb_calsis WHERE gender='L'");
+	$rekl = mysqli_query($conn,"SELECT count(*) as lk FROM tb_calsis WHERE gender='L'");
 	$row = mysqli_fetch_array($rekl);
 	$rl = $row['lk'];
-	$rekp = mysqli_query($sqlconn,"SELECT count(*) as pr FROM tb_calsis WHERE gender='P'");
+	$rekp = mysqli_query($conn,"SELECT count(*) as pr FROM tb_calsis WHERE gender='P'");
 	$row = mysqli_fetch_array($rekp);
 	$rp = $row['pr'];
 	$rs = $rl + $rp;
@@ -204,7 +197,7 @@ class PDF extends FPDF{
 	$pdf->MultiCell(31.0,0.5, 'a. berusia paling tinggi 15 (lima belas) tahun pada tanggal 1 Juli tahun berjalan; dan');
 	$pdf->MultiCell(31.0,0.5,'b. memiliki ijazah SD/sederajat atau dokumen lain yang menjelaskan telah menyelesaikan kelas 6 (enam) SD.');
 	$pdf->Ln();
-	$sqlad = mysqli_query($sqlconn, "SELECT *FROM tb_user WHERE jbtdinas='1'");
+	$sqlad = mysqli_query($conn, "SELECT *FROM tb_user WHERE jbtdinas='1'");
 	$row = mysqli_fetch_array($sqlad);
 	$kepsek = $row['nama'];
 	$nipkepsek = $row['nip'];
@@ -221,7 +214,7 @@ class PDF extends FPDF{
 		$nmjbt1='';
 		$nipjbt1='';
 		$panitia='Pembuat Peringkat';
-		$sql=mysqli_query($sqlconn, "SELECT nama, nip FROM tb_user WHERE username='$_COOKIE[c_user]'");
+		$sql=mysqli_query($conn, "SELECT nama, nip FROM tb_user WHERE username='$_COOKIE[c_user]'");
 		$u=mysqli_fetch_array($sql);
 		$ketua=$u['nama'];
 		$nip=$u['nip'];
@@ -232,14 +225,14 @@ class PDF extends FPDF{
 		$diketahui='Mengetahui:';
 		$panitia='Ketua Panitia';
 		
-		$sqlu=mysqli_query($sqlconn, "SELECT * FROM tb_seleksi WHERE kdthpel='$_COOKIE[c_tahun]'");
+		$sqlu=mysqli_query($conn, "SELECT * FROM tb_seleksi WHERE kdthpel='$_COOKIE[c_tahun]'");
 		$row = mysqli_fetch_array($sqlu);
 		$tempat=$row['tmpseleksi'];
 		$tgl=$row['tglseleksi'];
 		$jbt=$row['jbtlegalisasi'];
 		$nmjbt=$row['nmlegalisasi'];
 		$nipjbt=$row['niplegalisasi'];
-		$sqlp=mysqli_query($sqlconn,"SELECT nama as nmpanitia, nip as nippanitia FROM tb_user WHERE jbtpanitia='2'");
+		$sqlp=mysqli_query($conn,"SELECT nama as nmpanitia, nip as nippanitia FROM tb_user WHERE jbtpanitia='2'");
 		$p=mysqli_fetch_array($sqlp);
 		$ketua=$p['nmpanitia'];
 		$nip=$p['nippanitia'];
@@ -250,7 +243,7 @@ class PDF extends FPDF{
 		$nipjbt1='NIP. '.$nipkepsek;
 
 	}
-	$sqlj=mysqli_query($sqlconn, "SELECT jbtlegalisasi FROM tb_seleksi WHERE jbtlegalisasi LIKE 'Kepala Dinas%'");
+	$sqlj=mysqli_query($conn, "SELECT jbtlegalisasi FROM tb_seleksi WHERE jbtlegalisasi LIKE 'Kepala Dinas%'");
 	$cekj = mysqli_num_rows($sqlj);
 	if($cekj==0)
 	{

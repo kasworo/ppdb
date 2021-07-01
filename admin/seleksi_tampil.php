@@ -1,8 +1,5 @@
 <?php
-	if(!isset($_COOKIE['c_user'])){header("Location: login.php");}	
-	include "../config/fungsi_umur.php";
-	$sql=mysqli_query($sqlconn,"SELECT awal FROM tb_thpel WHERE kdthpel='$_COOKIE[c_tahun]'");
-	$t=mysqli_fetch_array($sql);
+	$t=viewdata("tb_thpel","kdthpel",getthpel())[0];
 	$awal=$t['awal'];
 ?>
 <div class="modal fade" id="mySeleksi" aria-modal="true" tabindex="-1" role="dialog" aria-hidden="true">
@@ -92,13 +89,13 @@
 				</thead>
 				<tbody>
 				<?php
-					$qs=mysqli_query($sqlconn,"SELECT s.nopend, s.nisn, s.nama,s.tmplhr, s.tgllhr, s.gender, nmwali FROM tb_calsis s LEFT JOIN tb_ortu w ON w.idcalsis=s.idcalsis WHERE s.deleted='0' AND s.kdthpel='$_COOKIE[c_tahun]'");
-					$no=0;
-					
-					while($s=mysqli_fetch_array($qs))
+					$qs=viewdata("v_calsis");
+					$no=0;					
+					foreach($qs as $s)
 					{
 						$no++;
 						$ms=0;
+						
 						$umur=umur($s['tgllhr'],$awal);
 						$lahir = new DateTime($s['tgllhr']);
 						$batas = new DateTime($awal);
@@ -107,10 +104,10 @@
 						
 						if($umurpd>=11 && $umurpd<=15){$bdg='badge-success';$um="Memenuhi Syarat";$ms++;}
 						else {$bdg='badge-danger';$um="Tidak Memenuhi Syarat";}
-						$sqrapor=mysqli_query($sqlconn,"SELECT SUM(rapor) as jrapor FROM (SELECT AVG(nilai) as rapor FROM tb_nilai WHERE jns='1' AND nopend='$s[nopend]' GROUP BY kdmapel, nopend) as tbrapor");
+						$sqrapor=mysqli_query($conn,"SELECT SUM(rapor) as jrapor FROM (SELECT AVG(nilai) as rapor FROM tb_nilai WHERE jns='1' AND nopend='$s[nopend]' GROUP BY kdmapel, nopend) as tbrapor");
 						$r=mysqli_fetch_array($sqrapor);
 						$rapor=$r['jrapor'];
-						$squs=mysqli_query($sqlconn,"SELECT SUM(nilai) as us FROM tb_nilai WHERE jns='2' AND nopend='$s[nopend]'");
+						$squs=mysqli_query($conn,"SELECT SUM(nilai) as us FROM tb_nilai WHERE jns='2' AND nopend='$s[nopend]'");
 						$u=mysqli_fetch_array($squs);
 						$us=$u['us'];
 						if($rapor==''){$nilai=$us;} 
@@ -118,7 +115,7 @@
 						
 						if($nilai>0){$ms++;}
 						
-						$qberkas=mysqli_query($sqlconn,"SELECT COUNT(*) as berkas FROM tb_berkas WHERE nopend='$s[nopend]'");
+						$qberkas=mysqli_query($conn,"SELECT COUNT(*) as berkas FROM tb_berkas WHERE nopend='$s[nopend]'");
 						$b=mysqli_fetch_array($qberkas);
 						$cekberkas=$b['berkas'];
 						if($cekberkas>=4){$vberkas="Lengkap";$cb="badge-success";$ms++;} 
@@ -131,7 +128,10 @@
 					<td><?php echo $s['nisn'];?></td>
 					<td style="text-align:center"><?php echo $s['gender'];?></td>
 					<td><?php echo ucwords(strtolower($s['nmwali']));?></td>
-					<td style="text-align:center"><span class="badge <?php echo $bdg;?>"><?php echo $um;?></span></td>
+					<td style="text-align:center">
+						<!-- <span class="badge <?php echo $bdg;?>"><?php echo $um;?></span> -->
+						<?php echo $umur;?>
+					</td>
 					<td style="text-align:center"><?php echo $nilai;?></td>
 					<td style="text-align:center"><span class="badge <?php echo $cb?>"><?php echo $vberkas;?></td>
 					<td style="text-align:center"><span class="badge <?php echo $bms?>"><?php echo $vms;?></span></td>
