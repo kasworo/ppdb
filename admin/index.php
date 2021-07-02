@@ -2,8 +2,7 @@
 	session_start();
 	if(!isset($_SESSION['login'])){header("Location: login.php");}
 	include "dbfunction.php";
-	$quser=mysqli_query($conn, "SELECT nama, foto, `level` FROM tb_user WHERE iduser='$_COOKIE[id]'");
-	$u=mysqli_fetch_assoc($quser);
+	$u=viewdata("tb_user","iduser",$_COOKIE['id'])[0];
 	$nama=$u['nama'];
 	$foto=$u['foto'];
 	$level=$u['level'];

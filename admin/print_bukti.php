@@ -1,19 +1,15 @@
 <?php
-    session_start();
     require('../assets/library/fpdf/fpdf.php');
-	include "../config/fungsi_tgl.php";
 	require_once("../assets/library/phpqrcode/qrlib.php");
+	include "dbfunction.php";
 	class PDF extends FPDF
 	{
 		function Header()
 		{
-			include "../config/konfigurasi.php";
-			$sqlsetid=mysqli_query($sqlconn, "SELECT*FROM tb_thpel WHERE aktif='Y'");
-			$setid=mysqli_fetch_array($sqlsetid);
-			$thpel=substr($setid['nmthpel'],0,9);
-
-			$sqlad = mysqli_query($sqlconn, "SELECT *FROM tb_skul");
-			$ad = mysqli_fetch_array($sqlad);
+			global $conn;
+			$th=viewdata("tb_thpel", "kdthpel", getthpel())[0];
+			$thpel=substr($th['nmthpel'],0,9);
+			$ad = viewdata("tb_skul")[0];
 			$nmskul = $ad['nmskul'];
 			$skpd =$ad['skpd'];
 			$almt =$ad['alamat'];
@@ -28,7 +24,7 @@
 			{
 				$logo ='../images/'.$logsek;
 			}
-			$this->Image($logo,1.5,0.75,1.25); // logo
+			$this->Image($logo,1.5,0.75,1.25);
 			$this->SetTextColor(0,0,0); // warna tulisan
 			$this->SetFont('Times','B','12'); // font yang digunakan
 			$this->Cell(1.5,0.5,''); // cell dengan panjang 1
@@ -50,9 +46,8 @@
 
 		function Footer()
 		{
-			include "../config/konfigurasi.php";
-			$sqlf = mysqli_query($sqlconn, "SELECT*FROM tb_skul");
-			$row = mysqli_fetch_array($sqlf);	 
+			global $conn;
+			$row =viewdata("tb_skul")[0];
 			$this->SetFont('Times','','10');
 			$this->SetY(-1.5,5);
 			$this->Rect(1,13.5,0.75,0.75);
@@ -65,20 +60,18 @@
 	$pdf->SetAutoPageBreak(true,1.0);
 	$pdf->SetMargins(1.2,0.75,1.0,1.0);
 	$pdf->AliasNbPages();
-
-	include "../config/konfigurasi.php";
 	$nopes = base64_decode($_REQUEST['id']);
 	
 	if($nopes=='all')
 	{
-		$sql0 = mysqli_query($sqlconn, "SELECT s.*, sa.nmskulasal, sa.almtskulasal FROM tb_calsis s INNER JOIN tb_skul_asal sa ON s.idskulasal=sa.idskulasal ORDER BY s.nopend ASC");
+		$rows=viewdata("v_report");
 	}
 	else
 	{ 
-		$sql0=mysqli_query($sqlconn, "SELECT s.*, sa.nmskulasal, sa.almtskulasal FROM tb_calsis s INNER JOIN tb_skul_asal sa ON s.idskulasal=sa.idskulasal WHERE s.nopend = '$nopes'");
+		$rows=viewdata("v_report","nopend", $nopes);
 	}
 	
-	while($row = mysqli_fetch_array($sql0))
+	foreach($rows as $row)
 	{
 		$pdf->AddPage();
 		$nmpes=$row['nopend'];

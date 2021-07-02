@@ -42,7 +42,7 @@
 	}
 
 	if(isset($_POST['simpan'])){
-		$cek=cekdata("tbortu","idcalsis",$id);
+		$cek=cekdata("tb_ortu","idcalsis",$id);
 		if($cek==0){
 			$data=array(
 				'idcalsis'=>$id,
@@ -63,6 +63,12 @@
 				'nohp' => $_POST['nohp']
 			);
 			$rows=adddata("tb_ortu",$data);
+			if($rows>0){
+				echo "<script>alert('Tambah Data Berhasil');
+					window.location.href='index.php?p=addortu&id=$_GET[id]';
+				</script>";
+				exit;
+			}
 		}
 		else {
 			$data=array(
@@ -84,6 +90,12 @@
 				'nohp' => $_POST['nohp']
 			);
 			$rows=editdata("tb_ortu", $data,"idcalsis", $id);
+			if($rows>0){
+				echo "<script>alert('Update Data Berhasil');
+					window.location.href='index.php?p=addortu&id=$_GET[id]';
+				</script>";
+				exit;
+			}
 		}		
 	}
 ?>

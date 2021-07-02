@@ -64,8 +64,7 @@ if(isset($_POST['simpan'])){
 		if($rows>0){
 			echo "<script>alert('Update Data Berhasil');
 				window.location.href='index.php?p=addsiswa&m=2&id=$_GET[id]';
-			</script>";
-			
+			</script>";			
 			exit;
 		}
 		else {

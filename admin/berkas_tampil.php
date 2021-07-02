@@ -26,11 +26,11 @@
                 <thead>
                 <tr>
                   <th style="text-align: center;width:2.5%">No.</th>
-                  <th style="text-align: center;width:10%">Nama Siswa</th>
-                  <th style="text-align: center;width:7.5%">NISN</th>
+                  <th style="text-align: center;width:25%">Nama Siswa</th>
+                  <th style="text-align: center;width:10%">NISN</th>
                   <th style="text-align: center;width:10%">Foto</th>
-                  <th style="text-align: center;width:12.5%">Akte</th>
-                  <th style="text-align: center;width:12.5%">KK</th>
+                  <th style="text-align: center;width:10%">Akte</th>
+                  <th style="text-align: center;width:10%">KK</th>
                   <th style="text-align: center;width:10%">SKHU</th>
                   <th style="text-align: center">Aksi</th>
                 </tr>
