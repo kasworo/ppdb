@@ -39,7 +39,7 @@
                   <td style="text-align: center"><?php echo $no.'.';?></td>
                   <td><?php echo ucwords(strtolower($s['nama']));?></td>
                   <td><?php echo $s['nisn'];?></td>
-                  <td><?php echo ($s['nmskulasal']);?></td>
+                  <td><?php echo ($s['asl']);?></td>
                   <td style="text-align: center">
                     <a href="print_bukti.php?id=<?php echo base64_encode($s['nopend']);?>" class="btn btn-xs btn-success btn-flat" target="_blank">
                         <i class="fas fa-print"></i>&nbsp;Bukti

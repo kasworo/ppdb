@@ -12,21 +12,21 @@
             </div>
             <div class="modal-body">
                 <div class="col-sm-12">
-                    <div class="form-group">
-                        <label for="nosk">Kode Jadwal</label>
-                        <input class="form-control" id="idjd" name="idjd" disabled>
+                    <div class="form-group row mb-3">
+                        <label for="nosk" class="col-md-4">Kode Jadwal</label>
+                        <input class="form-control col-md-8" id="idjd" name="idjd" disabled>
                     </div>
-                    <div class="form-group">
-                        <label for="nosk">Dimulai Pada</label>
-                        <input class="form-control" id="awaljd" name="awaljd" placeholder="Awal Kegiatan" autocomplete="off">
+                    <div class="form-group row mb-3">
+                        <label for="awaljd" class="col-md-4">Dimulai Pada</label>
+                        <input class="form-control col-md-8" id="awaljd" name="awaljd" placeholder="Awal Kegiatan" autocomplete="off">
                     </div>
-                    <div class="form-group">
-                        <label for="nosk">Diakhiri Pada</label>
-                        <input class="form-control" id="akhirjd" name="akhirjd" placeholder="Akhir Kegiatan" autocomplete="off">
+                    <div class="form-group row mb-3">
+                        <label for="akhirjd" class="col-md-4">Diakhiri Pada</label>
+                        <input class="form-control col-md-8" id="akhirjd" name="akhirjd" placeholder="Akhir Kegiatan" autocomplete="off">
                     </div>
-                    <div class="form-group">
-                        <label for="nosk">Uraian Kegiatan</label>
-                        <textarea class="form-control" id="uraijd" name="uraijd" placeholder="Uraian Kegiatan"></textarea>
+                    <div class="form-group row mb-3">
+                        <label for="uraijd" class="col-md-4">Uraian Kegiatan</label>
+                        <textarea class="form-control col-md-8" id="uraijd" name="uraijd" placeholder="Uraian Kegiatan"></textarea>
                     </div>                        
                 </div>
             </div>
@@ -39,15 +39,13 @@
                 </button>
             </div>
         </div>
-        <!-- /.modal-content -->
     </div>
-              <!-- /.modal-dialog -->
- </div>
+</div>
           
 <div class="col-sm-12">
     <div class="card card-secondary card-outline">
         <div class="card-header">
-            <h4 class="card-title">Pengaturan Jadwal PPDB</h4>
+            <h4 class="card-title">Pengaturan Jadwal PPDB <?php echo getidjadwal();?></h4>
         </div>
         <div class="card-body">            
             <div class="row">
@@ -88,8 +86,8 @@
                         <tr>
                             <td style="text-align:center"><?php echo $i,'.';?></td>
                             <td style="text-align:left"><?php echo $jd['kegiatan'];?></td>
-                            <td style="text-align:left"><?php echo indonesian_date($jd['awal']).'<br/>'.substr($jd['awal'],11,5).' WIB';?></td>
-                            <td style="text-align:left"><?php echo indonesian_date($jd['akhir']).'<br/>'.substr($jd['akhir'],11,5).' WIB';?></td>
+                            <td style="text-align:left"><?php echo indonesian_date($jd['awal']);?></td>
+                            <td style="text-align:left"><?php echo indonesian_date($jd['akhir']);?></td>
                             <td style="text-align:center">
                                 <a href="#myJadwal" data-toggle="modal" data-id="<?php echo $jd['kdjadwal'];?>" class="btn btn-xs btn-info editJadwal">
                                     <i class="fas fa-edit"></i>&nbsp;Edit
@@ -115,15 +113,8 @@
     $("#btnTambah").click(function(){
         $(".modal-title").html("Tambah Jadwal PPDB");
         $("#simpan").html("<i class='fas fa-save'></i> Simpan");
-        var kdthpel = "<?php echo $_COOKIE['c_tahun'];?>";
-			$.ajax({
-				url: "jadwal_getid.php",
-				data: "kdthpel="+kdthpel,
-				cache: false,
-				success: function(data){
-				 $("#idjd").val(data);
-				}
-			});
+        $("#idjd").val("<?php echo getidjadwal();?>");
+			
     })
     $('#akhirjd').datetimepicker({
         timepicker:true,
@@ -174,10 +165,15 @@
             $.ajax({
                 url: "jadwal_simpan.php",
                 type:"post",
-                data: "id="+id+"&awal="+awal+"&akhir="+akhir+"&uraian="+uraian,
+                data: "m=1&id="+id+"&awal="+awal+"&akhir="+akhir+"&uraian="+uraian,
                 cache: false,
-                success: function(data){
-                    toastr.success(data);
+                success: function(e){
+                    if(e==1){
+                        toastr.success("Tambah atau Edit Jadwal Berhasil!");
+                    }
+                    else {
+                        toastr.error("Tambah atau Edit Jadwal Gagal!");
+                    }
                 }
             });
         }

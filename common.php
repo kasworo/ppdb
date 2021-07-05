@@ -22,17 +22,25 @@
         return $result;
     }
 
+    function umur($tgl_lahir, $tgl_batas)
+	{
+		$lahir = new DateTime($tgl_lahir);
+		$batas = new DateTime($tgl_batas);
+		$diff = $batas->diff($lahir);
+		return $diff->y." thn ".substr('0'.$diff->m,-2)." bln ".$diff->d ." hari";
+	}
+
     function getskul(){
         global $conn;
         $sql=mysqli_query($conn, "SELECT*FROM tb_skul");
-        $row=mysqli_fetch_array($sql);
+        $row=mysqli_fetch_assoc($sql);
         return $row['kdskul'];
     }
 
     function getthpel(){
         global $conn;
         $sql=mysqli_query($conn, "SELECT*FROM tb_thpel WHERE aktif='Y'");
-        $row=mysqli_fetch_array($sql);
+        $row=mysqli_fetch_assoc($sql);
         return $row['kdthpel'];
     }
 
@@ -40,9 +48,10 @@
         global $conn;
         $kdskul=getskul();
         $sql=mysqli_query($conn, "SELECT tp.kdthpel, COUNT(*) as jml FROM tb_calsis cs INNER JOIN tb_thpel tp USING (kdthpel) WHERE tp.aktif='Y' AND cs.kdskul='$kdskul' AND cs.nopend IS NOT NULL");
-        $row=mysqli_fetch_array($sql);
+        $row=mysqli_fetch_assoc($sql);
         $kdthpel=$row['kdthpel'];
-        $urut=$row['jml'];
+        
+        $urut=$row['jml']+1;
         if($urut>9)
         {
             $urt=substr('000'.$urut,1,4);
@@ -54,77 +63,92 @@
         return "PSB".$kdthpel.$urt;
     }
 
-    
-
-    function cekdata($data){
+    function getidjadwal(){
         global $conn;
-        $result=mysqli_query($conn, $data);                
-        return mysqli_num_rows($result);
+        $sql=mysqli_query($conn, "SELECT COUNT(*) as jml, tp.kdthpel FROM tb_jadwal jd INNER JOIN tb_thpel tp ON tp.kdthpel=jd.kdthpel WHERE tp.aktif='Y'");
+        $d=mysqli_fetch_assoc($sql);
+        $urut=$d['jml']+1;
+        $kdthpel=$d['kdthpel'];
+        if($urut>9)
+        {
+            $urt=substr('00'.$urut,1,3);
+        }
+        else
+        {
+            $urt=substr('00'.$urut,0,3);	
+        }
+
+       return "JD".$kdthpel.$urut;     
     }
 
-    function query($data){
+    function getbataslahir(){
         global $conn;
-        $result=mysqli_query($conn, $data); 
-        $row=[];
+        $sql=mysqli_query($conn, "SELECT DATE_ADD(awal, INTERVAL -15 YEAR) as bataslahir FROM tb_thpel WHERE aktif='Y'");
+        $row=mysqli_fetch_assoc($sql);
+        return $row['bataslahir'];
+    }
+
+    function viewdata($tbl, $key='', $id='', $ord=''){
+        global $conn;
+        if($key=='' && $id=='' && $ord==''){
+            $sql="SELECT*FROM $tbl"; 
+        }
+        elseif($ord==''){
+            $sql="SELECT*FROM $tbl WHERE $key='$id'";
+        }
+        else {
+            $sql="SELECT*FROM $tbl WHERE $key = '$id' ORDER BY $ord";
+        }
+        $result=mysqli_query($conn, $sql);
+        $rows=[];
         while($row=mysqli_fetch_assoc($result)){
             $rows[]=$row;
         }
         return $rows;
+    }    
+
+    function cekdata($tbl,$key='',$id=''){
+        global $conn;
+        if($key=='' && $id==''){
+            $sql="SELECT*FROM $tbl";
+        }
+        else {
+            $sql="SELECT*FROM $tbl WHERE $key='$id'";
+        }
+        $result=mysqli_query($conn, $sql);                
+        return mysqli_num_rows($result);
     }
 
-    function addcalsis($data){
-        global $conn;
-        $kdskul=getskul();
-        $kdthpel=getthpel();
-        $saiki=date('Y-m-d');
-        $nama=mysqli_escape_string($conn,$data['nama']);
-        $nik=$data['nik'];
-        $nisn=$data['nisn'];
-        $tmplahir=$data['tmplahir'];
-        $tgllahir=$data['tgllahir'];
-        $gender=$data['gender'];
-        $agama=$data['agama'];
-        $almt=$data['almt'];
-        $desa=$data['desa'];
-        $kec=$data['kec'];
-        $kab=$data['kab'];
-        $prov=$data['prov'];
-        $kdpos=$data['kdpos'];
-        $nohp=$data['nohp'];
-        $password=password_hash(str_replace("-","",$tgllahir), PASSWORD_DEFAULT);
-        $sql="INSERT INTO tb_calsis (kdskul, kdthpel, nama, nik, nisn, tmplhr, tgllhr, agama, gender, alamat, desa, kec, kab, prov, kdpos, nohp, deleted, tglinput, pwd) VALUES ('$kdskul','$kdthpel', '$nama', '$nik', '$nisn', '$tmplahir','$tgllahir', '$agama', '$gender', '$almt', '$desa', '$kec', '$kab','$prov','$kdpos','$nohp','0', '$saiki','$password')";
-        mysqli_query($conn,$sql);
-        return mysqli_affected_rows($conn);        
-    }
-
-    function isinopend($data){
-        global $conn;
-        $nisn=$data['nisn'];
-        $nik=$data['nik'];
-        $nopend=getnomor();
-        $sql="UPDATE tb_calsis SET nopend='$nopend' WHERE nisn='$nisn'";
+    function adddata($tbl, $data){
+        global $conn;        
+        $key = array_keys($data);
+        $val = array_values($data);
+        $sql = "INSERT INTO $tbl (".implode(', ', $key). ") VALUES ('". implode("', '", $val)."')";
+        var_dump($sql);die;
         mysqli_query($conn,$sql);
         return mysqli_affected_rows($conn);
-       
     }
 
-    function editcalsis($data){
+    function editdata($tbl,$data,$colm,$id){
         global $conn;
-        $nisn=$data['nisn'];
-        $nik=$data['nik'];
-        $nopend=$data['nopend'];
-        $sql="UPDATE tbcalsis SET nama='$nama' WHERE nisn='$nisn' OR nik='$nik' OR nopend='$nopend'";
+        $cols = array(); 
+        foreach($data as $key=>$val) {
+            $cols[] = "$key = '$val'";
+        }
+        $sql = "UPDATE $tbl SET " . implode(', ', $cols). " WHERE $colm='$id'";
+        var_dump($sql);die;
         mysqli_query($conn,$sql);
-        return mysqli_affected_rows($conn);       
+        return mysqli_affected_rows($conn);
     }
 
-    function delcalsis($data){
+    function seleksidata($tbl,$id){
         global $conn;
-        
-    }
-
-    function fotocalsis($data){
-        global $conn;
-       
+        $sql="SELECT*FROM $tbl WHERE tgllhr>='$id' ORDER BY tgllhr ASC";
+        $result=mysqli_query($conn, $sql);
+        $rows=[];
+        while($row=mysqli_fetch_assoc($result)){
+            $rows[]=$row;
+        }
+        return $rows;
     }
 ?>

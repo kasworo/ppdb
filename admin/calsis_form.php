@@ -37,6 +37,7 @@ if(isset($_GET['m'])) {
 		$kdpos=$cs['kdpos'];
 		$nohp=$cs['nohp'];
 		$idskulasal=$cs['idskulasal'];
+		$hid="hidden";
 	}
 }
 
@@ -46,7 +47,7 @@ if(isset($_POST['simpan'])){
 		$data=array(
 			'nik' => $_POST['nik'],
 			'nisn' => $_POST['nisn'], 
-			'nama' => $_POST['calsis'], 
+			'nama' => mysqli_escape_string($conn,$_POST['calsis']), 
 			'tmplhr' => $_POST['tmplahir'], 
 			'tgllhr' => $_POST['tgllahir'], 
 			'agama' => $_POST['agama'], 
@@ -61,16 +62,6 @@ if(isset($_POST['simpan'])){
 			'idskulasal'=>$_POST['skul']
 		);
 		$rows=editdata("tb_calsis",$data,"idcalsis",$id);
-		if($rows>0){
-			echo "<script>alert('Update Data Berhasil');
-				window.location.href='index.php?p=addsiswa&m=2&id=$_GET[id]';
-			</script>";			
-			exit;
-		}
-		else {
-			echo "<script>alert('Update Data Gagal')</script>";
-			exit;
-		}
 	}
 	else {		
 		$pass=password_hash(str_replace('-',$_POST['tgllahir']),PASSWORD_DEFAULT);
@@ -80,7 +71,7 @@ if(isset($_POST['simpan'])){
 			'kdthpel'=>getthpel(),
 			'nik' => $_POST['nik'],
 			'nisn' => $_POST['nisn'], 
-			'nama' => $_POST['calsis'], 
+			'nama' =>mysqli_escape_string($conn,$_POST['calsis']), 
 			'tmplhr' => $_POST['tmplahir'], 
 			'tgllhr' => $_POST['tgllahir'], 
 			'agama' => $_POST['agama'], 
@@ -97,17 +88,32 @@ if(isset($_POST['simpan'])){
 			'idskulasal'=>$_POST['skul']
 		);	
 		$rows=adddata("tb_calsis",$data);
-		if($rows>0){
-			echo "<script>
-				alert('Tambah Data Berhasil');
-				window.location.href='index.php?p=addsiswa&m=2';
+	}
+	if($rows>0){
+		echo "<script>
+				$(function() {
+					toastr.success('Tambah atau Update Data Berhasil!','Terima Kasih...',{
+						timeOut:1000,
+						fadeOut:1000,
+						onHidden:function(){
+							window.location.href='index.php?p=addortu&id=".base64_encode($id)."';
+						}
+					});
+				});
 			</script>";
-			exit;
-		}
-		else {
-			echo "<script>alert('Tambah Data Gagal')</script>";
-			exit;
-		}
+	}
+	else {
+		echo "<script>
+				$(function() {
+					toastr.error('Tambah atau Update Data Gagal!','Mohon Maaf',{
+						timeOut:1000,
+						fadeOut:1000,
+						onHidden:function(){
+							window.location.href='index.php?p=datacalsis';
+						}
+					});
+				});
+			</script>";
 	}
 }
 ?>

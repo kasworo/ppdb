@@ -44,35 +44,51 @@
 	if(isset($_POST['simpan'])){
 		$cek=cekdata("tb_ortu","idcalsis",$id);
 		if($cek==0){
-			$data=array(
-				'idcalsis'=>$id,
-				'nmwali'=>$_POST['nama'],
-				'nik' => $_POST['nik'],
-				'tmplhr' => $_POST['tmplahir'], 
-				'agama' => $_POST['agama'], 
-				'hubkel' => $_POST['hubkel'], 
-				'kdpdk' => $_POST['pendidikan'],
-				'kdkerja'=>$_POST['kerja'],
-				'kdhasil'=>$_POST['hasil'], 
-				'alamat' => $_POST['almt'], 
-				'desa' => $_POST['desa'], 
-				'kec' => $_POST['kec'], 
-				'kab' => $_POST['kab'], 
-				'prov' => $_POST['prov'], 
-				'kdpos' => $_POST['kdpos'], 
-				'nohp' => $_POST['nohp']
-			);
-			$rows=adddata("tb_ortu",$data);
-			if($rows>0){
-				echo "<script>alert('Tambah Data Berhasil');
-					window.location.href='index.php?p=addortu&id=$_GET[id]';
-				</script>";
-				exit;
+			if($_POST['tgllahir']==''){
+				$data=array(
+					'idcalsis'=>$id,
+					'nmwali'=>mysqli_escape_string($conn,$_POST['nama']),
+					// 'nik' => $_POST['nik'],
+					// 'tmplhr' => $_POST['tmplahir'], 
+					// 'agama' => $_POST['agama'], 
+					// 'hubkel' => $_POST['hubkel'], 
+					// 'kdpdk' => $_POST['pendidikan'],
+					// 'kdkerja'=>$_POST['kerja'],
+					// 'kdhasil'=>$_POST['hasil'], 
+					// 'alamat' => $_POST['almt'], 
+					// 'desa' => $_POST['desa'], 
+					// 'kec' => $_POST['kec'], 
+					// 'kab' => $_POST['kab'], 
+					// 'prov' => $_POST['prov'], 
+					// 'kdpos' => $_POST['kdpos'], 
+					// 'nohp' => $_POST['nohp']
+				);
 			}
+			else {
+				$data=array(
+					'idcalsis'=>$id,
+					'nmwali'=>mysqli_escape_string($conn,$_POST['nama']),
+					'nik' => $_POST['nik'],
+					'tmplhr' => $_POST['tmplahir'], 
+					'tgllhr' => $_POST['tgllahir'], 
+					'agama' => $_POST['agama'], 
+					'hubkel' => $_POST['hubkel'], 
+					'kdkerja'=>$_POST['kerja'],
+					'kdhasil'=>$_POST['hasil'], 
+					'alamat' => $_POST['almt'], 
+					'desa' => $_POST['desa'], 
+					'kec' => $_POST['kec'], 
+					'kab' => $_POST['kab'], 
+					'prov' => $_POST['prov'], 
+					'kdpos' => $_POST['kdpos'], 
+					'nohp' => $_POST['nohp']
+				);
+			}
+			$rows=adddata("tb_ortu",$data);			
 		}
 		else {
 			$data=array(
-				'nmwali'=>$_POST['nama'],
+				'nmwali'=>mysqli_escape_string($conn,$_POST['nama']),
 				'nik' => $_POST['nik'],
 				'tmplhr' => $_POST['tmplahir'], 
 				'tgllhr' => $_POST['tgllahir'], 
@@ -89,13 +105,33 @@
 				'kdpos' => $_POST['kdpos'], 
 				'nohp' => $_POST['nohp']
 			);
-			$rows=editdata("tb_ortu", $data,"idcalsis", $id);
-			if($rows>0){
-				echo "<script>alert('Update Data Berhasil');
-					window.location.href='index.php?p=addortu&id=$_GET[id]';
+			$rows=editdata("tb_ortu", $data,"idcalsis", $id);			
+		}
+		if($rows>0){
+			echo "<script>
+					$(function() {
+						toastr.success('Tambah atau Update Data Berhasil!','Terima Kasih...',{
+							timeOut:1000,
+							fadeOut:1000,
+							onHidden:function(){
+								window.location.href='index.php?p=datacalsis';
+							}
+						});
+					});
 				</script>";
-				exit;
-			}
+		}
+		else {
+			echo "<script>
+					$(function() {
+						toastr.error('Tambah atau Update Data Gagal!','Mohon Maaf',{
+							timeOut:1000,
+							fadeOut:1000,
+							onHidden:function(){
+								window.location.href='index.php?p=datacalsis';
+							}
+						});
+					});
+				</script>";
 		}		
 	}
 ?>

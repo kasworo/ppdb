@@ -1,5 +1,6 @@
 <?php
-$id=base64_decode($_GET['id']);
+	$id=base64_decode($_GET['id']);
+
 ?>
 <div class="alert alert-warning">
 	<p><strong>Petunjuk:</strong></p>
@@ -10,172 +11,78 @@ $id=base64_decode($_GET['id']);
 		<h5 class="m-0">Form Data Nilai</h5>
 	</div>
 	<div class="card-body">
-
-			<div class="col-sm-12">
+		<div class="col-sm-12">
+			<?php
+				$no=0;
+				$rerata=0;
+				$qnil=viewdata("tb_mapel");
+				foreach($qnil as $n):
+				$no++;
+			?>
+			<div class="form-group row mb-2">
+				<label class="col-sm-4"><?php echo $n['nmmapel'];?></label>
+				<?php for ($i=1;$i<=6;$i++):?>
+				<div class="col-sm-1" style="padding-bottom:5px">
+					<?php
+						$q1=mysqli_query($conn,"SELECT nilai FROM tb_nilai WHERE semester='$i' AND jns='1' AND kdmapel='$n[kdmapel]' AND idcalsis='$id'");
+						$row=mysqli_fetch_array($q1);
+					?>
+					<input class="form-control form-control-sm " id="rpt<?php echo $no.$i;?>" style="text-align:center" placeholder="Rapor <?php echo $i;?>" value="<?php echo $row['nilai'];?>"/>
+				</div>
+				<script type="text/javascript">								
+					$("#rpt<?php echo $no.$i;?>").change(function(){
+						var sem="<?php echo $i;?>";
+						var kdmapel = "<?php echo $n['kdmapel'];?>";
+						var id = "<?php echo base64_encode($id);?>";
+						var nilai = $("#rpt<?php echo $no.$i;?>;?>").val();
+						$.ajax({
+							url: "nilai_simpan.php",
+							type:"POST",
+							data: "jns=1&sem="+sem+"&kdmapel="+kdmapel+"&id="+id + "&nilai="+nilai,
+							cache: false,
+							success: function(e){
+								if(e==1){
+									toastr.success("Tambah atau Update Nilai Rapor Berhasil!");
+								}
+								else{
+									toastr.error("Tambah atau Update Nilai Rapor Gagal!");
+								}
+							}
+						});
+					});
+				</script>			
+				<?php endfor?>
+				<div class="col-sm-1" style="padding-bottom:5px">
 				<?php
-						$no=0;
-						$rerata=0;
-						$qnil=mysqli_query($conn, "SELECT*FROM tb_mapel");
-						while($n=mysqli_fetch_array($qnil))
-						{
-							$no++;
-						?>
-							<div class="row" style="padding-bottom:5px">
-								<label class="col-sm-4"><?php echo $n['nmmapel'];?></label>
-								<div class="col-sm-1" style="padding-bottom:5px">
-									<?php
-										$q1=mysqli_query($conn,"SELECT nilai FROM tb_nilai WHERE semester='1' AND jns='1' AND kdmapel='$n[kdmapel]' AND nopend='$id'");
-										$row=mysqli_fetch_array($q1);
-									?>
-									<input class="form-control form-control-sm" id="nilai1<?php echo $n['kdmapel'];?>" style="text-align:center" placeholder="Sms 1" value="<?php echo $row['nilai'];?>"/>
-								</div>
-								<div class="col-sm-1" style="padding-bottom:5px">
-									<?php
-										$q1=mysqli_query($conn,"SELECT nilai FROM tb_nilai WHERE semester='2' AND jns='1' AND  kdmapel='$n[kdmapel]' AND nopend='$id'");
-										$row1=mysqli_fetch_array($q1);
-									?>
-									<input class="form-control form-control-sm col-xs-8" id="nilai2<?php echo $n['kdmapel'];?>" style="text-align:center" placeholder="Sms 2" value="<?php echo $row1['nilai'];?>"/>
-								</div>
-								<div class="col-sm-1" style="padding-bottom:5px">
-									<?php
-										$q2=mysqli_query($conn,"SELECT nilai FROM tb_nilai WHERE semester='3' AND jns='1' AND  kdmapel='$n[kdmapel]' AND nopend='$id'");
-										$row2=mysqli_fetch_array($q2);
-									?>
-									<input class="form-control form-control-sm" id="nilai3<?php echo $n['kdmapel'];?>" style="text-align:center" placeholder="Sms 3" value="<?php echo $row2['nilai'];?>"/>
-								</div>
-								<div class="col-sm-1" style="padding-bottom:5px">
-									<?php
-										$q3=mysqli_query($conn,"SELECT nilai FROM tb_nilai WHERE semester='4' AND jns='1' AND  kdmapel='$n[kdmapel]' AND nopend='$id'");
-										$row3=mysqli_fetch_array($q3);
-									?>
-									<input class="form-control form-control-sm" id="nilai4<?php echo $n['kdmapel'];?>" style="text-align:center" placeholder="Sms 4" value="<?php echo $row3['nilai'];?>"/>
-								</div>
-								<div class="col-sm-1" style="padding-bottom:5px">
-									<?php
-										$q4=mysqli_query($conn,"SELECT nilai FROM tb_nilai WHERE semester='5' AND jns='1' AND  kdmapel='$n[kdmapel]' AND nopend='$id'");
-										$row4=mysqli_fetch_array($q4);
-									?>
-									<input class="form-control form-control-sm" id="nilai5<?php echo $n['kdmapel'];?>" style="text-align:center" placeholder="Sms 5" value="<?php echo $row4['nilai'];?>"/>
-								</div>
-								<div class="col-sm-1" style="padding-bottom:5px">
-									<?php
-										$q5=mysqli_query($conn,"SELECT nilai FROM tb_nilai WHERE semester='6' AND jns='1' AND  kdmapel='$n[kdmapel]' AND nopend='$id'");
-										$row5=mysqli_fetch_array($q5);
-									?>
-									<input class="form-control form-control-sm" id="nilai6<?php echo $n['kdmapel'];?>" style="text-align:center" placeholder="Sms 6" value="<?php echo $row5['nilai'];?>"/>
-								</div>
-								<div class="col-sm-1" style="padding-bottom:5px">
-									<?php
-										$qus=mysqli_query($conn,"SELECT nilai FROM tb_nilai WHERE semester='6' AND jns='2' AND  kdmapel='$n[kdmapel]' AND nopend='$id'");
-										$rus=mysqli_fetch_array($qus);
-									?>
-									<input class="form-control form-control-sm" id="nilaius<?php echo $n['kdmapel'];?>" style="text-align:center" placeholder="Nilai US" value="<?php echo $rus['nilai'];?>"/>
-								</div>
-							</div>
-							<script type="text/javascript">								
-								$("#nilai1<?php echo $n['kdmapel'];?>").change(function(){
-									var kdmapel = "<?php echo $n['kdmapel'];?>";
-									var nopend = "<?php echo base64_encode($id);?>";
-									var nilai = $("#nilai1<?php echo $n['kdmapel'];?>").val();
-									$.ajax({
-										url: "nilai_simpan.php",
-										type:"POST",
-										data: "jns=1&semester=1"+"&kdmapel="+kdmapel+"&nopend="+nopend + "&nilai="+nilai,
-										cache: false,
-										success: function(){
-											toastr.success(data);
-										}
-									});
-								})
-
-								$("#nilai2<?php echo $n['kdmapel'];?>").change(function(){
-									var kdmapel = "<?php echo $n['kdmapel'];?>";
-									var nopend = "<?php echo base64_encode($id);?>";
-									var nilai = $("#nilai2<?php echo $n['kdmapel'];?>").val();
-									$.ajax({
-										url: "nilai_simpan.php",
-										type:"POST",
-										data: "jns=1&semester=2"+"&kdmapel="+kdmapel+"&nopend="+nopend + "&nilai="+nilai,
-										cache: false,
-										success: function(){
-											toastr.success(data);
-										}
-									});
-								})
-
-								$("#nilai3<?php echo $n['kdmapel'];?>").change(function(){
-									var kdmapel = "<?php echo $n['kdmapel'];?>";
-									var nopend = "<?php echo base64_encode($id);?>";
-									var nilai = $("#nilai3<?php echo $n['kdmapel'];?>").val();
-									$.ajax({
-										url: "nilai_simpan.php",
-										type:"POST",
-										data: "jns=1&semester=3"+"&kdmapel="+kdmapel+"&nopend="+nopend + "&nilai="+nilai,
-										cache: false,
-										success: function(){
-											toastr.success(data);
-										}
-									});
-								})
-								$("#nilai4<?php echo $n['kdmapel'];?>").change(function(){
-									var kdmapel = "<?php echo $n['kdmapel'];?>";
-									var nopend = "<?php echo base64_encode($id);?>";
-									var nilai = $("#nilai4<?php echo $n['kdmapel'];?>").val();
-									$.ajax({
-										url: "nilai_simpan.php",
-										type:"POST",
-										data: "jns=1&semester=4"+"&kdmapel="+kdmapel+"&nopend="+nopend + "&nilai="+nilai,
-										cache: false,
-										success: function(){
-											toastr.success(data);
-										}
-									});
-								})
-								$("#nilai5<?php echo $n['kdmapel'];?>").change(function(){
-									var kdmapel = "<?php echo $n['kdmapel'];?>";
-									var nopend = "<?php echo base64_encode($id);?>";
-									var nilai = $("#nilai5<?php echo $n['kdmapel'];?>").val();
-									$.ajax({
-										url: "nilai_simpan.php",
-										type:"POST",
-										data: "jns=1&semester=5"+"&kdmapel="+kdmapel+"&nopend="+nopend + "&nilai="+nilai,
-										cache: false,
-										success: function(){
-											toastr.success(data);
-										}
-									});
-								})
-								$("#nilai6<?php echo $n['kdmapel'];?>").change(function(){
-									var kdmapel = "<?php echo $n['kdmapel'];?>";
-									var nopend = "<?php echo base64_encode($id);?>";
-									var nilai = $("#nilai6<?php echo $n['kdmapel'];?>").val();
-									$.ajax({
-										url: "nilai_simpan.php",
-										type:"POST",
-										data: "jns=1&semester=6"+"&kdmapel="+kdmapel+"&nopend="+nopend + "&nilai="+nilai,
-										cache: false,
-										success: function(){
-											toastr.success(data);
-										}
-									});
-								})
-								$("#nilaius<?php echo $n['kdmapel'];?>").change(function(){
-									var kdmapel = "<?php echo $n['kdmapel'];?>";
-									var nopend = "<?php echo base64_encode($id);?>";
-									var nilai = $("#nilaius<?php echo $n['kdmapel'];?>").val();
-									$.ajax({
-										url: "nilai_simpan.php",
-										type:"POST",
-										data: "jns=2&semester=6"+"&kdmapel="+kdmapel+"&nopend="+nopend + "&nilai="+nilai,
-										cache: false,
-										success: function(data){
-											toastr.success(data);
-											//alert(data);
-										}
-									});
-								})
-							</script>	
-						<?php } ?>
+					$qus=mysqli_query($conn,"SELECT nilai FROM tb_nilai WHERE semester='$i' AND jns='2' AND  kdmapel='$n[kdmapel]' AND idcalsis='$id'");
+					$rus=mysqli_fetch_array($qus);
+				?>
+					<input class="form-control form-control-sm" id="nus<?php echo $no;?>" style="text-align:center" placeholder="Nilai US" value="<?php echo $rus['nilai'];?>"/>
+				</div>				
+			</div>
+			<script type="text/javascript">								
+				$("#nus<?php echo $no;?>").change(function(){
+					var sem="<?php echo $i;?>";
+					var kdmapel = "<?php echo $n['kdmapel'];?>";
+					var id= "<?php echo base64_encode($id);?>";
+					var nilai = $("#nus<?php echo $no;?>").val();
+					$.ajax({
+						url: "nilai_simpan.php",
+						type:"POST",
+						data: "jns=2&sem="+sem+"&kdmapel="+kdmapel+"&id="+id+"&nilai="+nilai,
+						cache: false,
+						success: function(e){
+							if(e==1){
+								toastr.success("Tambah atau Update Nilai US Berhasil!");
+							}
+							else{
+								toastr.error("Tambah atau Update Nilai US Gagal!");
+							}
+						}
+					});
+				})
+			</script>
+			<?php endforeach ?>	
 			</div>
 	</div>
     <div class="card-footer justify-content-between">

@@ -1,12 +1,4 @@
-<?php
-if(!isset($_COOKIE['c_user'])){header("Location: login.php");}
-?>
-<script type="text/javascript">
-$(document).ready(function () {
-	bsCustomFileInput.init();
-});
-</script>
-<?php if(!empty($_REQUEST['d']) && $_REQUEST['d']=='1'){include "nilai_upload.php";}?>
+<?php if(!empty($_GET['d']) && $_GET['d']=='1'){include "nilai_upload.php";}?>
 <div class="modal fade" id="myNilai" aria-modal="true">
 	<div class="modal-dialog">
 		<div class="modal-content">
@@ -36,9 +28,7 @@ $(document).ready(function () {
 				</div>
 			</form>
 		</div>
-			<!-- /.modal-content -->
 	</div>
-		<!-- /.modal-dialog -->
 </div>
 <div class="col-sm-12">
     <div class="card card-secondary card-outline">
@@ -68,43 +58,30 @@ $(document).ready(function () {
                 <thead>
                 <tr>
                   <th style="text-align: center;width:2.5%">No.</th>
-                  <th style="text-align: center;width:22.5%">Nama Siswa</th>
+                  <th style="text-align: center;width:32.5%">Nama Siswa</th>
                   <th style="text-align: center;width:7.5%">NISN</th>
-                  <th style="text-align: center;width:20%">Sekolah Asal</th>
-                  <th style="text-align: center;width:10%">Rapor</th>
-                  <th style="text-align: center;width:10%">USBN</th>
+                  <th style="text-align: center;width:22.5%">Sekolah Asal</th>
+                  <th style="text-align: center;width:10%">Nilai</th>
                   <th style="text-align: center">Aksi</th>
                 </tr>
                 </thead>
                 <tbody>
                 <?php
-                    $qs=mysqli_query($sqlconn,"SELECT s.nopend, s.nisn, s.nama,s.tmplhr, s.tgllhr, s.gender, nmskulasal, sum(nilai) as skhu FROM tb_calsis s LEFT JOIN tb_skul_asal sa ON sa.idskulasal=s.idskulasal INNER JOIN tb_nilai n ON n.nopend=s.nopend WHERE deleted='0' AND n.jns='2' AND kdthpel='$_COOKIE[c_tahun]' GROUP BY n.nopend ORDER BY skhu DESC");
-                    $no=0;
-                    
-                    while($s=mysqli_fetch_array($qs))
+                    $qs=viewdata("v_calsis","","","kabeh");
+                    $no=0;                    
+                    foreach($qs as $s)
                     {
-                        $no++;
-                        $qrapor=mysqli_query($sqlconn,"SELECT AVG(nilai) as rapor FROM tb_nilai WHERE nopend='$s[nopend]' AND jns='1' GROUP BY kdmapel, nopend");
-                        $jrapor=0;
-                        while($rp=mysqli_fetch_array($qrapor))
-                        {
-                        $nilairapor=$rp['rapor'];
-                        $jrapor=$jrapor+$nilairapor;
-                        }
+                      $no++;
                         
-                        $qusbn=mysqli_query($sqlconn,"SELECT SUM(nilai) as usbn FROM tb_nilai WHERE nopend='$s[nopend]' AND jns='2' GROUP BY nopend");
-                        $us=mysqli_fetch_array($qusbn);
-                        $nilaius=$us['usbn'];
                 ?>
                 <tr>
                   <td style="text-align: center"><?php echo $no.'.';?></td>
                   <td><?php echo ucwords(strtolower($s['nama']));?></td>
                   <td><?php echo $s['nisn'];?></td>
-                  <td><?php echo ($s['nmskulasal']);?></td>
-                  <td style="text-align: center"><?php echo $jrapor;?></td>
-                  <td style="text-align:center"><?php echo $nilaius;?></td>
+                  <td><?php echo ($s['asl']);?></td>
+                  <td style="text-align:center"><?php echo $s['kabeh'];?></td>
                   <td style="text-align: center">
-                    <a href="index.php?p=addnilai&m=2&id=<?php echo base64_encode($s['nopend']);?>" class="btn btn-xs btn-primary btn-flat">
+                    <a href="index.php?p=addnilai&m=1&id=<?php echo base64_encode($s['idcalsis']);?>" class="btn btn-xs btn-primary btn-flat">
                         <i class="fas fa-edit"></i>&nbsp;Input
                     </a>
                     <a href="#" class="btn btn-xs btn-danger btn-flat">

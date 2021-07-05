@@ -27,7 +27,7 @@
 		$lahir = new DateTime($tgl_lahir);
 		$batas = new DateTime($tgl_batas);
 		$diff = $batas->diff($lahir);
-		return $diff->y." thn ".substr('0'.$diff->m,-2)." bln ".$diff->d ." hari";
+		return $diff->y." th ".substr('0'.$diff->m,-2)." bl ".substr('0'.$diff->d,-2) ." hr";
 	}
 
     function getskul(){
@@ -48,8 +48,9 @@
         global $conn;
         $kdskul=getskul();
         $sql=mysqli_query($conn, "SELECT tp.kdthpel, COUNT(*) as jml FROM tb_calsis cs INNER JOIN tb_thpel tp USING (kdthpel) WHERE tp.aktif='Y' AND cs.kdskul='$kdskul' AND cs.nopend IS NOT NULL");
-        $row=mysqli_fetch_array($sql);
+        $row=mysqli_fetch_assoc($sql);
         $kdthpel=$row['kdthpel'];
+        
         $urut=$row['jml']+1;
         if($urut>9)
         {
@@ -62,10 +63,31 @@
         return "PSB".$kdthpel.$urt;
     }
 
-    function viewdata($tbl, $key='', $id='', $ord=''){
+    function getidjadwal(){
+        global $conn;
+        $sql=mysqli_query($conn, "SELECT COUNT(*) as jml, tp.kdthpel FROM tb_jadwal jd INNER JOIN tb_thpel tp ON tp.kdthpel=jd.kdthpel WHERE tp.aktif='Y'");
+        $d=mysqli_fetch_assoc($sql);
+        $urut=$d['jml']+1;
+        $kdthpel=$d['kdthpel'];
+        if($urut>9)
+        {
+            $urt=substr('00'.$urut,1,3);
+        }
+        else
+        {
+            $urt=substr('00'.$urut,0,3);	
+        }
+
+       return "JD".$kdthpel.$urut;     
+    }
+
+    function viewdata($tbl, $key='', $id='', $ord='' ){
         global $conn;
         if($key=='' && $id=='' && $ord==''){
             $sql="SELECT*FROM $tbl"; 
+        }
+        else if($key=='' && $id==''){
+            $sql="SELECT*FROM $tbl ORDER BY $ord"; 
         }
         elseif($ord==''){
             $sql="SELECT*FROM $tbl WHERE $key='$id'";
@@ -86,10 +108,18 @@
         if($key=='' && $id==''){
             $sql="SELECT*FROM $tbl";
         }
-        else {
+        else if($id=='')
+        {
+            $cols = array(); 
+            foreach($key as $kol=>$val) {
+                $cols[] = "$kol = '$val'";
+            }
+            $sql="SELECT*FROM $tbl WHERE ". implode(' AND ', $cols);
+        }
+        else{
             $sql="SELECT*FROM $tbl WHERE $key='$id'";
         }
-        $result=mysqli_query($conn, $sql);                
+        $result=mysqli_query($conn, $sql);
         return mysqli_num_rows($result);
     }
 
@@ -102,13 +132,24 @@
         return mysqli_affected_rows($conn);
     }
 
-    function editdata($tbl,$data,$colm,$id){
+    function editdata($tbl,$data,$colm='',$id=''){
         global $conn;
-        $cols = array(); 
+        $cols = array();
         foreach($data as $key=>$val) {
             $cols[] = "$key = '$val'";
         }
-        $sql = "UPDATE $tbl SET " . implode(', ', $cols). " WHERE $colm='$id'";
+        if($id==''){
+            $where=array();
+            foreach($colm as $wh=>$nil){
+                $where[] = "$wh = '$nil'";
+            }
+            $sql = "UPDATE $tbl SET " . implode(', ', $cols). " WHERE ".implode (' AND ',$where);
+        }        
+        else
+        {
+            $sql = "UPDATE $tbl SET " . implode(', ', $cols). " WHERE $colm='$id'";
+        }
+        
         mysqli_query($conn,$sql);
         return mysqli_affected_rows($conn);
     }

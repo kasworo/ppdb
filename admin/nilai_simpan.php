@@ -1,16 +1,33 @@
 <?php
-	include "../config/konfigurasi.php";
-	$id=base64_decode($_POST['nopend']);
-    $cek=mysqli_num_rows(mysqli_query($sqlconn, "SELECT*FROM tb_nilai WHERE nopend='$id' AND kdmapel='$_POST[kdmapel]' AND semester='$_POST[semester]' AND jns='$_POST[jns]'"));
+	include "dbfunction.php";
+	$id=base64_decode($_POST['id']);
+	$cari=array(
+		'idcalsis'=>$id,
+		'kdmapel'=>$_POST['kdmapel'],
+		'semester'=>$_POST['sem'],
+		'jns'=>$_POST['jns']
+	);
+	
+	$update=array(
+		'nilai'=>$_POST['nilai']
+	);
+	
+	$data=array(
+		'idcalsis'=>$id,
+		'kdmapel'=>$_POST['kdmapel'],
+		'semester'=>$_POST['sem'],
+		'jns'=>$_POST['jns'],
+		'nilai'=>$_POST['nilai']
+	);
+
+	$cek=cekdata("tb_nilai",$cari);
     if($cek>0)
 	{
-		$sql=mysqli_query($sqlconn, "UPDATE tb_nilai SET nilai ='$_POST[nilai]' WHERE nopend='$id' AND kdmapel='$_POST[kdmapel]' AND jns='$_POST[jns]' ");
-		echo "Update Nilai Berhasil!";
+		$rows=editdata("tb_nilai", $update, $cari);
 	}
 	else
 	{
-	    $sql=mysqli_query($sqlconn, "INSERT INTO tb_nilai (semester, nopend, kdmapel, nilai, jns) VALUES ('$_POST[semester]', '$id','$_POST[kdmapel]','$_POST[nilai]',  '$_POST[jns]')");
-        echo "Simpan Nilai Berhasil! ";
+	  $rows = adddata("tb_nilai",$data);
 	}
-
+	echo $rows;
 ?>

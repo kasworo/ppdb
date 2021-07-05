@@ -80,60 +80,54 @@
 					</button>
 				</div>
 		</div>
-			<!-- /.modal-content -->
 	</div>
-		<!-- /.modal-dialog -->
 </div>
-  <!-- Navbar -->
-  <nav class="main-header navbar navbar-expand navbar-white navbar-light">
-	<!-- Left navbar links -->
-	<ul class="navbar-nav">
-		<li class="nav-item">
-			<a class="nav-link" data-widget="pushmenu" href="#" role="button">
-				<i class="fas fa-bars"></i>
-			</a>
-		</li>
-	</ul>
-	<!-- SEARCH FORM -->
-	<div class="form-inline ml-2">
-	  <div class="input-group input-group-sm">
-		<input class="form-control form-control-navbar" type="search" id="dicari" placeholder="Cari Peserta Didik..." aria-label="Search">
-		<div class="input-group-append">
-		  <button class="btn btn-navbar" id="goleki">
-			<i class="fas fa-search"></i>
-		  </button>
+	<nav class="main-header navbar navbar-expand navbar-white navbar-light">
+		<ul class="navbar-nav">
+			<li class="nav-item">
+				<a class="nav-link" data-widget="pushmenu" href="#" role="button">
+					<i class="fas fa-bars"></i>
+				</a>
+			</li>
+		</ul>
+		<div class="form-inline ml-2">
+			<div class="input-group input-group-sm">
+				<input class="form-control form-control-navbar" type="search" id="dicari" placeholder="Cari Peserta Didik..." aria-label="Search">
+				<div class="input-group-append">
+					<button class="btn btn-navbar" id="goleki">
+						<i class="fas fa-search"></i>
+					</button>
+				</div>
+			</div>
 		</div>
-	  </div>
-	</div>
-	<!-- Right navbar links -->
-	<ul class="navbar-nav ml-auto">	
-		<li class="nav-item">
-			<span class="btn nav-link">
-				<?php echo $nama;?>
-			</span>
-	  	</li>
-		<li class="nav-item">
-			<span class="btn nav-link"  data-toggle="modal" data-target="#myPassword" title="Ganti Password">
-			<i class="fas fa-key"></i>
-			</span>
-	  	</li>
-		<li class="nav-item">
-			<a href="index.php?p=adduser&m=3" class="nav-link" title="Edit Data">
-			<i class="fas fa-edit"></i>
-			</a>
-	  	</li>
-		<li class="nav-item">
-			<a class="nav-link" href="logout.php" title="Keluar / Logout">
-		  		<i class="fas fa-power-off"></i>
-			</a>
-	  </li>
-	</ul>
-  </nav>
+		<ul class="navbar-nav ml-auto">	
+			<li class="nav-item">
+				<span class="btn nav-link">
+					<?php echo $nama;?>
+				</span>
+			</li>
+			<li class="nav-item">
+				<span class="btn nav-link"  data-toggle="modal" data-target="#myPassword" title="Ganti Password">
+				<i class="fas fa-key"></i>
+				</span>
+			</li>
+			<li class="nav-item">
+				<a href="index.php?p=adduser&m=3" class="nav-link" title="Edit Data">
+				<i class="fas fa-edit"></i>
+				</a>
+			</li>
+			<li class="nav-item">
+				<a class="nav-link" href="logout.php" title="Keluar / Logout">
+					<i class="fas fa-power-off"></i>
+				</a>
+		</li>
+		</ul>
+	</nav>
   <aside class="main-sidebar sidebar-dark-primary elevation-4">
 	<a href="index.php?p=dashboard" class="brand-link">
 	  <img src="../assets/img/logo.png" width="100" class="brand-image elevation-3"
 		   style="opacity: 1.0">
-	 <span class="brand-text font-weight-light">Aplikasi PPDB 1.1</span>
+	 <span class="brand-text font-weight-light">Aplikasi PPDB</span>
 	</a>
 	<div class="sidebar">
 	  <nav class="mt-3 pb-3 mb-3">
@@ -184,6 +178,12 @@
 			</a>
 			<ul class="nav nav-treeview">
 				<li class="nav-item">
+					<a href="index.php?p=pagu" class="nav-link">
+						<i class="far fa-bar-chart nav-icon"></i>
+						<p>Daya Tampung</p>
+					</a>
+				</li>
+				<li class="nav-item">
 					<a href="index.php?p=jadwal" class="nav-link">
 					<i class="far fa-calendar nav-icon"></i>
 					<p>Jadwal PPDB</p>
@@ -191,8 +191,8 @@
 				</li>
 				<li class="nav-item">
 					<a href="index.php?p=syarat" class="nav-link">
-					<i class="far fa-check-square nav-icon"></i>
-					<p>Persyaratan PPDB</p>
+						<i class="far fa-check-square nav-icon"></i>
+						<p>Persyaratan PPDB</p>
 					</a>
 				</li>
 			  <li class="nav-item">
@@ -332,6 +332,7 @@
 			else if($_GET['p']=='datauser') {include "user_tampil.php";}
 			else if($_GET['p']=='adduser'){include "user_form.php";}
 			else if($_GET['p']=='jadwal') {include "jadwal_tampil.php";}
+			else if($_GET['p']=='pagu') {include "pagu_tampil.php";}
 			else if($_GET['p']=='syarat') {include "syarat_tampil.php";}
 			else if($_GET['p']=='datamapel') {include "mapel_tampil.php";}
 			else if($_GET['p']=='skulasal') {include "skulasal_tampil.php";}
@@ -344,8 +345,7 @@
 			else if($_GET['p']=='cekberkas'){include "berkas_tampil.php";}
 			else if($_GET['p']=='ceklisberkas'){include "berkas_ceklis.php";}
 			else if($_GET['p']=='berkasupload'){include "berkas_upload.php";}
-			else if($_GET['p']=='buktitampil'){include "bukti_tampil.php";}
-			
+			else if($_GET['p']=='buktitampil'){include "bukti_tampil.php";}			
 			else if($_GET['p']=='hasilseleksi'){include "seleksi_tampil.php";}
 			
 		?>		  
@@ -357,7 +357,7 @@
 	<strong>Copyright &copy;</strong> Kasworo Wardani, Template By <a href="http://adminlte.io">AdminLTE.io</a>.
 	All rights reserved.
 	<div class="float-right d-none d-sm-inline-block">
-	  <b>Versi</b> 1.0.0
+	  <b>Versi</b> 1.1.1
 	</div>
   </footer>
 </div>

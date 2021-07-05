@@ -64,16 +64,17 @@
 	
 	if($nopes=='all')
 	{
-		$rows=viewdata("v_report");
+		$rows=viewdata("v_calsis");
 	}
 	else
 	{ 
-		$rows=viewdata("v_report","nopend", $nopes);
+		$rows=viewdata("v_calsis","nopend", $nopes);
 	}
 	
 	foreach($rows as $row)
 	{
 		$pdf->AddPage();
+		$idcalsis=$row['idcalsis'];
 		$nmpes=$row['nopend'];
 		$jk=$row['gender'];
 		$tgldaftar = $row['tglinput'];
@@ -111,7 +112,7 @@
 		$pdf->Cell(9,0.5,$gender);
 		$pdf->Cell(2.0,0.5,"SD / MI Asal ");
 		$pdf->Cell(0.25,0.5,":");
-		$pdf->Cell(7,0.5,$row['nmskulasal']);
+		$pdf->Cell(7,0.5,$row['asl']);
 		$pdf->Ln(0.75);
 		$pdf->Cell(1.0,1.2,'No.','LTBR',0,'C');
 		$pdf->Cell(10.0,1.2,'Persyaratan','LTBR',0,'C');
@@ -122,15 +123,14 @@
 		$pdf->Cell(2,0.6,'Fisik','LTBR',0,'C');
 		$pdf->Cell(3,0.6,'Elektronik','LTBR',0,'C');		
 		$pdf->Ln(0.6);
-		$sqla = mysqli_query($sqlconn, "SELECT tampil, ada, fileberkas FROM tb_syarat sy LEFT JOIN tb_ceklis cl ON cl.kdsyarat=sy.kdsyarat WHERE aktif='1' AND nopend='$nmpes'");
-		$no=0;
-		while ($row = mysqli_fetch_array($sqla))
+		$dok=viewdata('v_berkas','idcalsis',$row['idcalsis']);
+		foreach($dok as $d)
 		{
 			$no++;
-			if($row['ada']=='1'){$ada = "Ada";} else {$ada = "Tidak";}
-			if($row['fileberkas']=='' || $row['fileberkas']==null){$berkas='Belum Upload';} else {$berkas='Sudah Upload';}
+			if($d['ada']=='1'){$ada = "Ada";} else {$ada = "Tidak";}
+			if($d['fileberkas']=='' || $d['fileberkas']==null){$berkas='Belum Upload';} else {$berkas='Sudah Upload';}
 			$pdf->Cell(1.0,0.6,$no.'.','LTBR',0,'C');
-			$pdf->Cell(10.0,0.6,' '.$row['tampil'],'LTBR',0,'L');
+			$pdf->Cell(10.0,0.6,' '.$d['tampil'],'LTBR',0,'L');
 			$pdf->Cell(2,0.6,$ada,'LTBR',0,'C');
 			$pdf->Cell(3,0.6,$berkas,'LTBR',0,'C');
 			$pdf->Cell(2.5,0.6,'','LTBR',0,'C');

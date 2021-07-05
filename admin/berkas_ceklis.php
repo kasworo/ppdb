@@ -1,3 +1,5 @@
+<?php
+?>
 <div class="col-sm-12">
     <div class="card card-secondary card-outline">
         <div class="card-header">
@@ -19,10 +21,12 @@
                   <th style="text-align: center;width:2.5%">No.</th>
                   <th style="text-align: center;width:25%">Nama Siswa</th>
                   <th style="text-align: center;width:10%">NISN</th>
-                  <th style="text-align: center;width:10%">Foto</th>
-                  <th style="text-align: center;width:10%">Akte</th>
-                  <th style="text-align: center;width:10%">KK</th>
-                  <th style="text-align: center;width:10%">SKHU</th>
+                  <?php
+                    $qsy=viewdata("v_syarat");
+                    foreach($qsy as $sy){
+                  ?>
+                    <th style="text-align: center;width:10%"><?php echo $sy['aksyarat'];?></th>
+                  <?php } ?>
                 </tr>
                 </thead>
                 <tbody>
@@ -32,42 +36,49 @@
                     foreach($qs as $s)
                     {
                         $no++;
-                        if($s['foto']==''){$foto='Belum Upload';$btn='badge-danger';}
-                        else {$foto='Sudah Upload';$btn='badge-success';}
                         
-                        $qkk=mysqli_query($sqlconn, "SELECT jnsberkas, fileberkas FROM tb_berkas WHERE nopend='$s[nopend]' AND jnsberkas='1'");
-                        $k=mysqli_fetch_array($qkk);
-                        if($k['fileberkas']==''){$akte='Belum Upload';$btakte='badge-danger';}
-                        else {$akte='Sudah Upload';$btakte='badge-success';}
-                        
-                        $qskhu=mysqli_query($sqlconn, "SELECT jnsberkas, fileberkas FROM tb_berkas WHERE nopend='$s[nopend]' AND jnsberkas='2'");
-                        $sk=mysqli_fetch_array($qskhu);
-                        if($sk['fileberkas']==''){$skhu='Belum Upload';$btskhu='badge-danger';}
-                        else {$skhu='Sudah Upload';$btskhu='badge-success';}
-                        
-                        $qrapor=mysqli_query($sqlconn, "SELECT jnsberkas, fileberkas FROM tb_berkas WHERE nopend='$s[nopend]' AND jnsberkas='3'");
-                        $rp=mysqli_fetch_array($qrapor);
-                        if($rp['fileberkas']==''){$rapor='Belum Upload';$btrapor='badge-danger';}
-                        else {$rapor='Sudah Upload';$btrapor='badge-success';}
                 ?>
                 <tr>
                   <td style="text-align: center"><?php echo $no.'.';?></td>
                   <td><?php echo ucwords(strtolower($s['nama']));?></td>
                   <td style="text-align:center"><?php echo $s['nisn'];?></td>
-                  <td style="text-align:center">
-                    <badge class="badge <?php echo $btn;?>"><?php echo $foto;?></badge>
-                  </td>
-                  <td style="text-align:center">
-                    <badge class="badge <?php echo $btakte;?>"><?php echo $akte;?></badge>
-                  </td>
-                  <td style="text-align:center">
-                    <badge class="badge <?php echo $btskhu;?>"><?php echo $skhu;?></badge>
-                  </td>
-                  <td style="text-align:center">
-                    <badge class="badge <?php echo $btrapor;?>"><?php echo $rapor;?></badge>
-                  </td>
+                  <?php
+                    $qsy=viewdata("v_syarat");
+                    $i=0;
+                    foreach($qsy as $sy){
+                      $i++;
+                  ?>
+                    <td style="text-align: center">
+                      <span class="icheck-primary">
+                      <input type="checkbox" id="btnCeklis<?php echo $no.$i;?>" <?php echo $hsl;?>>
+								
+                      </span>
+                    </td>
+                    <script type="text/javascript">
+									$("#btnCeklis<?php echo $no.$i;?>").click(function(){
+										var id="<?php echo $s['idcalsis'];?>";
+										var sy="<?php echo $sy['kdsyarat'];?>";
+										if ($(this).is(":checked")) {
+											nil=1;
+										}
+										else{
+											nil=0;
+										}
+										$.ajax({
+											url:"berkas_simpan.php",
+											type:'POST',
+											data:"aksi=1&id="+id+"&sy="+sy+"&nil="+nil,
+											success:function(data){
+												toastr.success(data);
+											}
+										})										
+
+
+									})
+								</script>
+                  <?php } ?>                 
                 </tr>
-                    <?php } ?>
+                <?php } ?>
                 </tbody>
               </table>
             </div>
