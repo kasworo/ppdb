@@ -21,7 +21,7 @@
 			$baris++;
 		
 			$objPHPExcel->setActiveSheetIndex(0)
-			->setCellValue("A$baris", $no)->setCellValue("B$baris",$cs['idskulasal'])->setCellValue("C$baris",$cs['nisn'])->setCellValue("D$baris",strval($cs['nik']))->setCellValue("E$baris",$cs['nama'])->setCellValue("F$baris", $cs['tmplhr'])->setCellValue("G$baris",$cs['tgllhr'])->setCellValue("H$baris",$cs['gender'])->setCellValue("I$baris", $cs['agama'])->setCellValue("J$baris", '')->setCellValue("K$baris", '')->setCellValue("L$baris", '')->setCellValue("M$baris", '')->setCellValue("N$baris", '')->setCellValue("O$baris", '')->setCellValue("P$baris", '');
+			->setCellValue("A$baris", $no)->setCellValue("B$baris",$cs['idskulasal'])->setCellValue("C$baris",$cs['nisn'])->setCellValue("D$baris",strval($cs['nik']))->setCellValue("E$baris",$cs['nama'])->setCellValue("F$baris", $cs['tmplhr'])->setCellValue("G$baris",$cs['tgllhr'])->setCellValue("H$baris",$cs['gender'])->setCellValue("I$baris", $cs['agama'])->setCellValue("J$baris", $cs['alamat'])->setCellValue("K$baris", '')->setCellValue("L$baris", '')->setCellValue("M$baris", '')->setCellValue("N$baris", '')->setCellValue("O$baris", '')->setCellValue("P$baris", '');
 			
 		}
 	}
